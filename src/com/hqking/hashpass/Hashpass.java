@@ -9,11 +9,13 @@ public class Hashpass {
 	 * @throws NoSuchAlgorithmException 
 	 */
 	public static void main(String[] args) throws NoSuchAlgorithmException {
-		Generator generator = new Generator();
+		Generator generator = new Generator(Generator.tablePrintableAscii);
 		Site site = new Site(generator, 12);
-		site.bump = 3;
+		site.bump = 0;
 		
-		System.out.println(site.password("hqking"));
+		String pass = site.password("hqking");
+		System.out.println(pass);
+		System.out.println(generator.entropy(pass.toCharArray()));
 	}
 
 }
