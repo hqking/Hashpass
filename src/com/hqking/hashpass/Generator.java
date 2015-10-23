@@ -9,6 +9,7 @@ class Generator {
 	private long seed;
 	private char map[];
 
+	private static String masterKey;
 	private static MessageDigest digest;
 	private static final CRC32 crc32 = new CRC32();
 	
@@ -38,7 +39,11 @@ class Generator {
 	static final char tableNumeric[] = {
 		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 	};
-		
+
+	public static void setMasterKey(String key) {
+		masterKey = key;
+	}
+	
 	private static long lcg(long x0) {
 		return (1103515245 * x0 + 12345);
 	}
@@ -75,8 +80,8 @@ class Generator {
 		this.map = map;
 	}
 	
-	String password(Site site, String key) {		
-		byte hash[] = hashedWord(key + site.description);
+	String password(Site site) {		
+		byte hash[] = hashedWord(masterKey + site.description);
 		seed = bytes2long(hash);
 		
 		char pass[] = new char[site.length];

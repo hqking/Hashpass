@@ -22,7 +22,7 @@ class Site {
 		this(generator, DEFAULT_PASSWORD_LENGTH);
 	}
 	
-	String password(String key) {
-		return generator.password(this, key);
+	String password() {
+		return generator.password(this);
 	}
 }
