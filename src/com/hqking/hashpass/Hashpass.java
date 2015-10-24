@@ -18,6 +18,14 @@ public class Hashpass {
 		String pass = site.password();
 		System.out.println(pass);
 		System.out.println(generator.entropy(pass.toCharArray()));
+		
+		Validator validator = new Validator(pass);
+		System.out.printf("number: %d\n", validator.numericCount());
+		System.out.printf("lower letter: %d\n", validator.lowerLetterCount());
+		System.out.printf("upper letter: %d\n", validator.upperLetterCount());
+		System.out.printf("special char: %d\n", validator.specialCharCount());
+		System.out.printf("invalid char: %d\n", validator.invalidCount());
+		System.out.printf("score: %d\n", validator.score());
 	}
 
 }
