@@ -74,9 +74,9 @@ class StorageSqlite implements Storage {
 			ResultSet rs = select.executeQuery();
 
 			int length = rs.getInt("length");
-			String generator = rs.getString("generator");
+			String type = rs.getString("generator");
 				
-			site = new Site(Hashpass.findGenerator(generator), length);
+			site = new Site(type, length);
 				
 			site.bump = rs.getInt("bump");
 			site.description = rs.getString("description");

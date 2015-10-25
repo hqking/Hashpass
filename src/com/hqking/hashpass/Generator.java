@@ -6,12 +6,10 @@ import java.util.zip.CRC32;
 
 
 class Generator {
-	private long seed;
-	private char map[];
-
 	private static String masterKey;
 	private static MessageDigest digest;
 	private static final CRC32 crc32 = new CRC32();
+	private static long seed;
 	
 	static final char tablePrintableAscii[] = {
 		'!', '"', '#', '$', '%', '&', '\'', '(', ')', '*',
@@ -40,10 +38,18 @@ class Generator {
 		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 	};
 	
-	public static void setMasterKey(String key) {
-		masterKey = key;
+	private static char[] findMap(String type) {
+		if (type.compareTo("numeric") == 0) {
+			return tableNumeric;
+		} else if (type.compareTo("alphaNumeric") == 0) {
+			return tableAlphaNumeric;
+		} else if (type.compareTo("printableAscii") == 0) {
+			return tablePrintableAscii;
+		} else {
+			return tablePrintableAscii;
+		}
 	}
-	
+		
 	private static long lcg(long x0) {
 		return (1103515245 * x0 + 12345);
 	}
@@ -62,40 +68,44 @@ class Generator {
 		return digest.digest();
 	}
 	
-	private int random(int mod) {
+	private static int random(int mod) {
 		seed = lcg(seed);
 		
 		return Math.abs((int)seed) % mod;
 	}
 	
-	private void passGenerate(char pass[]) {
+	private static void passGenerate(char pass[], char map[]) {
 		for (int i = 0; i < pass.length; i++) {
 			int index = random(map.length);
 			pass[i] = map[index];
 		}
 	}
 	
-	Generator(char map[]) throws NoSuchAlgorithmException {
+	static void init(String key) throws NoSuchAlgorithmException {
 		digest = java.security.MessageDigest.getInstance("SHA-1");
-		this.map = map;
+		masterKey = key;
 	}
 	
-	String password(Site site) {		
+	static String password(Site site) {		
 		byte hash[] = hashedWord(masterKey + site.description);
 		seed = bytes2long(hash);
 		
+		char map[] = findMap(site.type);
+		
 		char pass[] = new char[site.length];
 		for (int i = 0; i <= site.bump; i++)
-			passGenerate(pass);
+			passGenerate(pass, map);
 		
 		return new String(pass);
 	}
 	
-	int entropy(char pass[]) {
+	static int entropy(String pass, String type) {
+		char map[] = findMap(type);
+		
 		double H; // entropy per symbol
 		
 		H = Math.log(map.length) / Math.log(2);
 		
-		return (int)(H * pass.length);
+		return (int)(H * pass.length());
 	}
 }

@@ -7,22 +7,34 @@ class Site {
 	int bump;
 	int length;
 	final LocalTime createTime;
-	private Generator generator;
+	String type;
+	
+	private String pass;
 	
 	private static final int DEFAULT_PASSWORD_LENGTH = 8;
 	
-	Site(Generator generator, int length) {
+	Site(String type, int length) {
 		createTime = LocalTime.now();
-		this.generator = generator;
 		this.length = length;
+		this.type = type;
 		bump = 0;
 	}
 	
-	Site(Generator generator) {
-		this(generator, DEFAULT_PASSWORD_LENGTH);
+	Site(String type) {
+		this(type, DEFAULT_PASSWORD_LENGTH);
 	}
 	
 	String password() {
-		return generator.password(this);
+		if (pass == null)
+			pass = Generator.password(this);
+		
+		return pass;
+	}
+	
+	int entropy() {
+		if (pass == null)
+			pass = Generator.password(this);
+		
+		return Generator.entropy(pass, type);
 	}
 }

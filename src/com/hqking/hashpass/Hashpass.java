@@ -3,34 +3,15 @@ package com.hqking.hashpass;
 import java.security.NoSuchAlgorithmException;
 
 public class Hashpass {
-	private static Generator printableAsciiGen;
-	private static Generator alphaNumericGen;
-	private static Generator numericGen;
-	
-	public static Generator findGenerator(String table) {
-		if (table.compareTo("numeric") == 0) {
-			return numericGen;
-		} else if (table.compareTo("alphaNumeric") == 0) {
-			return alphaNumericGen;
-		} else if (table.compareTo("printableAscii") == 0) {
-			return printableAsciiGen;
-		} else {
-			return printableAsciiGen;
-		}
-	}
-	
 	/**
 	 * @param args
 	 * @throws NoSuchAlgorithmException 
 	 */
 	public static void main(String[] args) throws NoSuchAlgorithmException {
-		Generator.setMasterKey("hqking");
+		Generator.init("hqking");
 		
-		printableAsciiGen = new Generator(Generator.tablePrintableAscii);
-		alphaNumericGen = new Generator(Generator.tableAlphaNumeric);
-		numericGen = new Generator(Generator.tableNumeric);
 		
-		Site site = new Site(printableAsciiGen, 12);
+		Site site = new Site("printableAscii", 12);
 		site.bump = 0;
 		
 		String pass = site.password();
