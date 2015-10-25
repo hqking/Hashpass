@@ -23,14 +23,14 @@ class StorageSqlite implements Storage {
 					"description text primary key," +
 					"bump integer," +
 					"length integer," +
-					"generator text)";
+					"type text)";
 
 			stat.executeUpdate(table);
 			
 			select = connection.prepareStatement("select * from site where description = ?");
 			
 			insert = connection.prepareStatement("insert or replace into site " +
-					"(description, bump, length, generator)" +
+					"(description, bump, length, type)" +
 					"values (?, ?, ?, ?);");
 			
 		} catch (SQLException e) {
@@ -46,7 +46,7 @@ class StorageSqlite implements Storage {
 			insert.setString(1, site.description);
 			insert.setInt(2, site.bump);
 			insert.setInt(3, site.length);
-			insert.setString(4, "test");
+			insert.setString(4, site.type);
 			
 			insert.executeUpdate();
 			
@@ -74,7 +74,7 @@ class StorageSqlite implements Storage {
 			ResultSet rs = select.executeQuery();
 
 			int length = rs.getInt("length");
-			String type = rs.getString("generator");
+			String type = rs.getString("type");
 				
 			site = new Site(type, length);
 				
@@ -83,8 +83,8 @@ class StorageSqlite implements Storage {
 				
 						
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			System.out.println("cant find " + desc);
 		}
 		
 		return site;
