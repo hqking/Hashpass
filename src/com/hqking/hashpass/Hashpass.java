@@ -35,7 +35,7 @@ public class Hashpass {
 		
 		String pass = site.password();
 		System.out.println(pass);
-		System.out.println(printableAsciiGen.entropy(pass.toCharArray()));
+		System.out.println(site.entropy());
 		
 		Validator validator = new Validator(pass);
 		System.out.printf("number: %d\n", validator.numericCount());
@@ -48,8 +48,10 @@ public class Hashpass {
 		StorageSqlite db = new StorageSqlite("test.db");
 		
 		Site ccb = db.find("ccb");
-		if (ccb != null)
+		if (ccb != null) {
 			System.out.println(ccb.password());
+			System.out.println(ccb.entropy());
+		}
 	}
 
 }
