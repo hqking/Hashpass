@@ -39,7 +39,7 @@ class Generator {
 	static final char tableNumeric[] = {
 		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 	};
-
+	
 	public static void setMasterKey(String key) {
 		masterKey = key;
 	}
