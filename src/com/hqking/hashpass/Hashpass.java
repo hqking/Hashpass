@@ -33,6 +33,13 @@ public class Hashpass {
 			System.out.println(ccb.password());
 			System.out.println(ccb.entropy());
 		}
+		
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				GraphicUI ui = new GraphicUI();
+				ui.createAndShowUI();
+			}
+		});
 	}
 
 }
