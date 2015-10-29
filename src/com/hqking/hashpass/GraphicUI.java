@@ -21,8 +21,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 
-public class GraphicUI extends JFrame {
-
+public class GraphicUI extends JFrame implements Runnable {
 	/**
 	 * 
 	 */
@@ -60,16 +59,14 @@ public class GraphicUI extends JFrame {
 
 	private JPasswordField pwdField;
 	
-	void createAndShowUI() {
-		JFrame frame = new JFrame("TopLevelDemo");
-		
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	private void createAndShowUI() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setOpaque(true);
 		menuBar.setBackground(new Color(154, 165, 127));
 		menuBar.setPreferredSize(new Dimension(200, 20));
-		frame.setJMenuBar(menuBar);
+		setJMenuBar(menuBar);
 		
 		Test tt = new Test();
 		
@@ -91,7 +88,7 @@ public class GraphicUI extends JFrame {
 		toolBar.add(label);
 		toolBar.add(pwdField);
 		toolBar.add(btnSave);
-		frame.getContentPane().add(toolBar, BorderLayout.PAGE_START);		
+		getContentPane().add(toolBar, BorderLayout.PAGE_START);		
 		
 		String test[] = {"jin yifeng", "hqking", "xiaodu", "papa", "qinqin"};
 		JList<String> list = new JList<String>(test);
@@ -101,7 +98,7 @@ public class GraphicUI extends JFrame {
 		JScrollPane listScroller = new JScrollPane(list);
 		listScroller.setPreferredSize(new Dimension(250, 80));
 		
-		frame.getContentPane().add(listScroller, BorderLayout.CENTER);
+		getContentPane().add(listScroller, BorderLayout.CENTER);
 		
 		DefaultMutableTreeNode top = new DefaultMutableTreeNode("Title 1");
 		DefaultMutableTreeNode t2 = new DefaultMutableTreeNode("Title 2");
@@ -115,11 +112,18 @@ public class GraphicUI extends JFrame {
 		
 		JScrollPane treeScroller = new JScrollPane(tree);
 		
-		frame.getContentPane().add(treeScroller, BorderLayout.LINE_START);
+		getContentPane().add(treeScroller, BorderLayout.LINE_START);
 		
-		frame.pack();
-		frame.setVisible(true);
+		pack();
+		setVisible(true);
+	}
+
+	@Override
+	public void run() {
+		createAndShowUI();
 	}
 	
-
+	public static void start() {
+		javax.swing.SwingUtilities.invokeLater(new GraphicUI("Password Brower"));
+	}
 }
