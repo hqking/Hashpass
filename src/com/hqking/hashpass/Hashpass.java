@@ -39,7 +39,7 @@ public class Hashpass {
 			System.out.println(ccb.entropy());
 		}
 		
-		GraphicUI.start();
+		PasswordBrowser.start();
 	}
 
 }

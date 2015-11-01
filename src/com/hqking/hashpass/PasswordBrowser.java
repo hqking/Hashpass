@@ -21,7 +21,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 
-public class GraphicUI extends JFrame implements Runnable {
+public class PasswordBrowser extends JFrame implements Runnable {
 	/**
 	 * 
 	 */
@@ -30,16 +30,16 @@ public class GraphicUI extends JFrame implements Runnable {
 	private JFrame frame;
 	private SiteInfo dialog;
 	
-	public GraphicUI() throws HeadlessException {
+	public PasswordBrowser() throws HeadlessException {
 		// TODO Auto-generated constructor stub
 	}
 
-	public GraphicUI(GraphicsConfiguration arg0) {
+	public PasswordBrowser(GraphicsConfiguration arg0) {
 		super(arg0);
 		// TODO Auto-generated constructor stub
 	}
 
-	public GraphicUI(String arg0) throws HeadlessException {
+	public PasswordBrowser(String arg0) throws HeadlessException {
 		super(arg0);
 		// TODO Auto-generated constructor stub
 		
@@ -47,7 +47,7 @@ public class GraphicUI extends JFrame implements Runnable {
 		dialog = new SiteInfo(frame);
 	}
 
-	public GraphicUI(String arg0, GraphicsConfiguration arg1) {
+	public PasswordBrowser(String arg0, GraphicsConfiguration arg1) {
 		super(arg0, arg1);
 		// TODO Auto-generated constructor stub
 	}
@@ -138,6 +138,6 @@ public class GraphicUI extends JFrame implements Runnable {
 	}
 	
 	public static void start() {
-		javax.swing.SwingUtilities.invokeLater(new GraphicUI("Password Brower"));
+		javax.swing.SwingUtilities.invokeLater(new PasswordBrowser("Password Brower"));
 	}
 }
