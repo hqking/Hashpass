@@ -38,6 +38,9 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener {
 	private JLabel passwordLabel;
 	private JSlider lengthSlider;
 	private JSpinner bumpField;
+	private JLabel entropyLabel;
+	private JLabel scoreLabel;
+	private JLabel commentLabel;
 	
 	private Site site;
 	
@@ -49,9 +52,9 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener {
 
     	add(addInputPane(), BorderLayout.PAGE_START);
     	
-    	add(addPasswordPane(), BorderLayout.CENTER);
-    	
     	add(addQualityPane(), BorderLayout.LINE_END);
+
+    	add(addPasswordPane(), BorderLayout.CENTER);
     	
     	add(addButtonPane(), BorderLayout.PAGE_END);
     	
@@ -106,18 +109,18 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener {
 	}
 
 	private JPanel addQualityPane() {
-		JLabel entropy = new JLabel("Entropy: %d bits");
-    	JLabel score = new JLabel("Score: %d");
-    	JLabel comment = new JLabel("Strong");
+		entropyLabel = new JLabel("Entropy: %d bits");
+    	scoreLabel = new JLabel("Score: %d");
+    	commentLabel = new JLabel("Strong");
     	
     	JPanel qualityPane = new JPanel();
     	qualityPane.setLayout(new BoxLayout(qualityPane, BoxLayout.PAGE_AXIS));
-    	qualityPane.add(entropy);
-    	qualityPane.add(score);
-    	qualityPane.add(comment);
+    	qualityPane.add(entropyLabel);
+    	qualityPane.add(scoreLabel);
+    	qualityPane.add(commentLabel);
     	qualityPane.setBorder(
     			BorderFactory.createCompoundBorder(
-						BorderFactory.createTitledBorder("Quality 质量"),
+						BorderFactory.createTitledBorder("Quality"),
 						BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 		return qualityPane;
 	}
@@ -169,8 +172,29 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener {
 	private void showPassword() {
 		if (site.description == null || site.description.length() == 0) {
 			passwordLabel.setText("Please input description");
+			entropyLabel.setText("0 bit");
+			scoreLabel.setText("0");
+			commentLabel.setText("no password");
 		} else {
-			passwordLabel.setText(Generator.password(site));
+			String pwd = Generator.password(site);
+			passwordLabel.setText(pwd);
+			
+			entropyLabel.setText(String.format("entropy: %d bits", Generator.entropy(pwd, site.type)));
+			
+			Validator validator = new Validator(pwd);
+			int score = validator.score();
+			scoreLabel.setText(String.format("score: %d", score));
+			if (score <= 20) {
+				commentLabel.setText("very week");
+			} else if (score <= 40) {
+				commentLabel.setText("week");
+			} else if (score <= 60) {
+				commentLabel.setText("normal");
+			} else if (score <= 80) {
+				commentLabel.setText("strong");
+			} else {
+				commentLabel.setText("very strong");
+			}
 		}
 	}
 	
