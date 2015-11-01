@@ -33,16 +33,13 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener {
 	private static final String CMD_PATTERN = "pattern";
 	private static final int INIT_BUMP = 0;
 	private static final int INIT_LENGTH = 12;
-	private static final String INIT_PATTERN = "Printable Ascii"; 
+	private static final String INIT_PATTERN = Generator.TABLE_PRINTALBE_ASCII; 
 	
 	private JLabel passwordLabel;
 	private JSlider lengthSlider;
 	private JSpinner bumpField;
 	
-	private String inputDescription;
-	private int inputBump = INIT_BUMP;
-	private int inputLength = INIT_LENGTH;
-	private String inputPattern = INIT_PATTERN;
+	private Site site;
 	
 	public SiteInfo(Frame frame) {
 		super(frame);
@@ -88,7 +85,10 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener {
 		GridBagLayout gridbag = new GridBagLayout();
 		inputPane.setLayout(gridbag);
 		
-		String[] patterns = {"Printable Ascii", "Alphanumeric", "Numbers only"};
+		String[] patterns = {
+				Generator.TABLE_PRINTALBE_ASCII, 
+				Generator.TABLE_ALPHA_NUMERIC,
+				Generator.TABLE_NUMBERS_ONLY};
 		JComboBox<String> patternSel = new JComboBox<String>(patterns);
 		patternSel.setActionCommand(CMD_PATTERN);
 		patternSel.addActionListener(this);
@@ -123,6 +123,9 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener {
 	}
 
 	private JLabel addPasswordPane() {
+		site = new Site(INIT_PATTERN, INIT_LENGTH);
+		site.bump = INIT_BUMP;
+		
 		passwordLabel = new JLabel("calculated password");
 		showPassword();
     	passwordLabel.setBorder(
@@ -164,11 +167,10 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener {
 	}
 
 	private void showPassword() {
-		if (inputDescription == null || inputDescription.length() == 0) {
+		if (site.description == null || site.description.length() == 0) {
 			passwordLabel.setText("Please input description");
 		} else {
-			passwordLabel.setText(String.format("%s + %s + %d + %d", 
-					inputDescription, inputPattern, inputLength, inputBump));
+			passwordLabel.setText(Generator.password(site));
 		}
 	}
 	
@@ -178,11 +180,11 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener {
 		
 		if (cmd.equals(CMD_DESC)) {
 			JTextField src = (JTextField)e.getSource();
-			inputDescription = src.getText();
+			site.description = src.getText();
 			showPassword();
 		} else if (cmd.equals(CMD_PATTERN)) {
 			JComboBox<String> src = (JComboBox<String>)e.getSource();
-			inputPattern = (String)src.getSelectedItem();
+			site.type = (String)src.getSelectedItem();
 			showPassword();
 		}
 	}
@@ -193,11 +195,11 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener {
 		
 		if (src.equals(lengthSlider)) {
 			if (lengthSlider.getValueIsAdjusting()) {
-				inputLength = lengthSlider.getValue();
+				site.length = lengthSlider.getValue();
 				showPassword();
 			}
 		} else if (src.equals(bumpField)) {
-			inputBump = (int)bumpField.getModel().getValue();
+			site.bump = (int)bumpField.getModel().getValue();
 			showPassword();
 		}
 	}
