@@ -8,6 +8,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -29,8 +30,13 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 6226076328845503856L;
-	private static final String CMD_DESC = "description";
-	private static final String CMD_PATTERN = "pattern";
+	private static final String CMD_DESC = "description_command";
+	private static final String CMD_PATTERN = "pattern_command";
+	private static final String CMD_QUITE = "quite_command";
+	private static final String CMD_SAVE = "save_command";
+	private static final String CMD_COPY = "copy_command";
+	private static final String CMD_PREV = "prev_command";
+	private static final String CMD_NEXT = "next_command";
 	private static final int INIT_BUMP = 0;
 	private static final int INIT_LENGTH = 12;
 	private static final String INIT_PATTERN = Generator.TABLE_PRINTALBE_ASCII; 
@@ -38,9 +44,12 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener {
 	private JLabel passwordLabel;
 	private JSlider lengthSlider;
 	private JSpinner bumpField;
+	private JComboBox<String> patternSel;
+	private JTextField descField;
 	private JLabel entropyLabel;
 	private JLabel scoreLabel;
 	private JLabel commentLabel;
+	private JButton saveButton;
 	
 	private Site site;
 	
@@ -60,11 +69,10 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener {
     	
     	setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
     	pack();
-    	setVisible(true);
 	}
 
 	private JPanel addInputPane() {
-		JTextField descField = new JTextField(30);
+		descField = new JTextField(30);
 		descField.setActionCommand(CMD_DESC);
 		descField.addActionListener(this);
 		JLabel descLabel = new JLabel("Site description: ");
@@ -92,7 +100,7 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener {
 				Generator.TABLE_PRINTALBE_ASCII, 
 				Generator.TABLE_ALPHA_NUMERIC,
 				Generator.TABLE_NUMBERS_ONLY};
-		JComboBox<String> patternSel = new JComboBox<String>(patterns);
+		patternSel = new JComboBox<String>(patterns);
 		patternSel.setActionCommand(CMD_PATTERN);
 		patternSel.addActionListener(this);
 		JLabel patternLabel = new JLabel("Patterns: ");
@@ -139,14 +147,41 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener {
 	}
 
 	private JPanel addButtonPane() {
-    		
+    	JButton btn;
+		
     	JPanel ctlPane = new JPanel();
     	ctlPane.setLayout(new FlowLayout());
-    	ctlPane.add(new JButton("Prev"));
-    	ctlPane.add(new JButton("Next"));
-    	ctlPane.add(new JButton("Copy"));
-    	ctlPane.add(new JButton("Save"));
-    	ctlPane.add(new JButton("Quit"));
+
+    	btn = new JButton("Prev");
+    	btn.setActionCommand(CMD_PREV);
+    	btn.addActionListener(this);
+    	btn.setMnemonic(KeyEvent.VK_P);
+    	ctlPane.add(btn);
+    	
+    	btn = new JButton("Next");
+    	btn.setActionCommand(CMD_NEXT);
+    	btn.addActionListener(this);
+    	btn.setMnemonic(KeyEvent.VK_N);
+    	ctlPane.add(btn);
+    	
+    	btn = new JButton("Copy");
+    	btn.setActionCommand(CMD_COPY);
+    	btn.addActionListener(this);
+    	btn.setMnemonic(KeyEvent.VK_C);
+    	ctlPane.add(btn);
+    	
+    	saveButton = new JButton("Save");
+    	saveButton.setActionCommand(CMD_SAVE);
+    	saveButton.addActionListener(this);
+    	saveButton.setMnemonic(KeyEvent.VK_S);
+    	saveButton.setEnabled(false);
+    	ctlPane.add(saveButton);
+    	
+    	btn = new JButton("Quit");
+    	btn.setActionCommand(CMD_QUITE);
+    	btn.addActionListener(this);
+    	btn.setMnemonic(KeyEvent.VK_Q);
+    	ctlPane.add(btn);
 		return ctlPane;
 	}
 	
@@ -195,6 +230,8 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener {
 			} else {
 				commentLabel.setText("very strong");
 			}
+			
+			saveButton.setEnabled(true);
 		}
 	}
 	
@@ -203,13 +240,21 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener {
 		String cmd = e.getActionCommand();
 		
 		if (cmd.equals(CMD_DESC)) {
-			JTextField src = (JTextField)e.getSource();
-			site.description = src.getText();
+			site.description = descField.getText();
 			showPassword();
 		} else if (cmd.equals(CMD_PATTERN)) {
-			JComboBox<String> src = (JComboBox<String>)e.getSource();
-			site.type = (String)src.getSelectedItem();
+			site.type = (String)patternSel.getSelectedItem();
 			showPassword();
+		} else if (cmd.equals(CMD_QUITE)) {
+			setVisible(false);
+		} else if (cmd.equals(CMD_SAVE)) {
+			saveButton.setEnabled(false);
+		} else if (cmd.equals(CMD_COPY)) {
+			
+		} else if (cmd.equals(CMD_PREV)) {
+			
+		} else if (cmd.equals(CMD_NEXT)) {
+			
 		}
 	}
 

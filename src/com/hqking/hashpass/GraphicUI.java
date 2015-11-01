@@ -4,18 +4,15 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GraphicsConfiguration;
-import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenuBar;
-import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
@@ -31,6 +28,7 @@ public class GraphicUI extends JFrame implements Runnable {
 	private static final long serialVersionUID = -1977703648719134928L;
 
 	private JFrame frame;
+	private SiteInfo dialog;
 	
 	public GraphicUI() throws HeadlessException {
 		// TODO Auto-generated constructor stub
@@ -46,6 +44,7 @@ public class GraphicUI extends JFrame implements Runnable {
 		// TODO Auto-generated constructor stub
 		
 		frame = this;
+		dialog = new SiteInfo(frame);
 	}
 
 	public GraphicUI(String arg0, GraphicsConfiguration arg1) {
@@ -64,8 +63,7 @@ public class GraphicUI extends JFrame implements Runnable {
 	            char[] input = pwdField.getPassword();
 	            System.out.println(input);
 	        } else if (cmd.equals(CMD_ADD)) {
-	        	SiteInfo dialog = new SiteInfo(frame);
-	        	
+	        	dialog.setVisible(true);
 	        }
 	    }	
 	}
