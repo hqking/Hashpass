@@ -3,13 +3,18 @@ package com.hqking.hashpass;
 import java.security.NoSuchAlgorithmException;
 
 public class Hashpass {
+	private static StorageSqlite db;
+	
+	static void save(Site site) {
+		db.save(site);
+	}
+	
 	/**
 	 * @param args
 	 * @throws NoSuchAlgorithmException 
 	 */
 	public static void main(String[] args) throws NoSuchAlgorithmException {
 		Generator.init("hqking");
-		
 		
 		Site site = new Site("printableAscii", 12);
 		site.bump = 0;
@@ -26,7 +31,7 @@ public class Hashpass {
 		System.out.printf("invalid char: %d\n", validator.invalidCount());
 		System.out.printf("score: %d\n", validator.score());
 		
-		StorageSqlite db = new StorageSqlite("test.db");
+		db = new StorageSqlite("test.db");
 		
 		Site ccb = db.find("ccb");
 		if (ccb != null) {

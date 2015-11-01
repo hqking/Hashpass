@@ -242,13 +242,18 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener {
 		if (cmd.equals(CMD_DESC)) {
 			site.description = descField.getText();
 			showPassword();
+			
 		} else if (cmd.equals(CMD_PATTERN)) {
 			site.type = (String)patternSel.getSelectedItem();
 			showPassword();
+			
 		} else if (cmd.equals(CMD_QUITE)) {
 			setVisible(false);
+			
 		} else if (cmd.equals(CMD_SAVE)) {
 			saveButton.setEnabled(false);
+			Hashpass.save(site);
+			
 		} else if (cmd.equals(CMD_COPY)) {
 			
 		} else if (cmd.equals(CMD_PREV)) {
