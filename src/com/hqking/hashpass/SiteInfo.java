@@ -15,6 +15,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
 class SiteInfo extends JDialog {
@@ -25,7 +26,24 @@ class SiteInfo extends JDialog {
 
 	public SiteInfo(Frame frame) {
 		super(frame);
-		
+				
+    	BorderLayout layout = new BorderLayout();
+    	setLayout(layout);
+
+    	add(addInputPane(), BorderLayout.PAGE_START);
+    	
+    	add(addPasswordPane(), BorderLayout.CENTER);
+    	
+    	add(addQualityPane(), BorderLayout.LINE_END);
+    	
+    	add(addButtonPane(), BorderLayout.PAGE_END);
+    	
+    	setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+    	pack();
+    	setVisible(true);
+	}
+
+	private JPanel addInputPane() {
 		JTextField descField = new JTextField(30);
 		JLabel descLabel = new JLabel("Site description: ");
 		descLabel.setLabelFor(descField);
@@ -38,8 +56,7 @@ class SiteInfo extends JDialog {
 		JLabel lengthLabel = new JLabel("Length: ");
 		lengthLabel.setLabelFor(lengthSlider);
 		
-		JTextField bumpField = new JTextField(5);
-		bumpField.setEditable(false);
+		JSpinner bumpField = new JSpinner();
 		JLabel bumpLabel = new JLabel("Retry: ");
 		bumpLabel.setLabelFor(bumpField);
 		
@@ -59,20 +76,11 @@ class SiteInfo extends JDialog {
 				BorderFactory.createCompoundBorder(
 						BorderFactory.createTitledBorder("Site infomation"),
 						BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-		
-    	BorderLayout layout = new BorderLayout();
-    	setLayout(layout);
+		return inputPane;
+	}
 
-    	add(inputPane, BorderLayout.PAGE_START);
-    	
-    	JLabel passwordLabel = new JLabel("calculated password");
-    	passwordLabel.setBorder(
-    			BorderFactory.createCompoundBorder(
-    					BorderFactory.createTitledBorder("Password"),
-    					BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-    	add(passwordLabel, BorderLayout.CENTER);
-    	
-    	JLabel entropy = new JLabel("Entropy: %d bits");
+	private JPanel addQualityPane() {
+		JLabel entropy = new JLabel("Entropy: %d bits");
     	JLabel score = new JLabel("Score: %d");
     	JLabel comment = new JLabel("Strong");
     	
@@ -85,27 +93,31 @@ class SiteInfo extends JDialog {
     			BorderFactory.createCompoundBorder(
 						BorderFactory.createTitledBorder("Quality 质量"),
 						BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-    	add(qualityPane, BorderLayout.LINE_END);
-    	
-    	JButton btnPrev = new JButton("Prev");
-    	JButton btnNext = new JButton("Next");
-    	JButton btnSave = new JButton("Save");
-    	JButton btnQuit = new JButton("Quit");
-    	
+		return qualityPane;
+	}
+
+	private JLabel addPasswordPane() {
+		JLabel passwordLabel = new JLabel("calculated password");
+    	passwordLabel.setBorder(
+    			BorderFactory.createCompoundBorder(
+    					BorderFactory.createTitledBorder("Password"),
+    					BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+		return passwordLabel;
+	}
+
+	private JPanel addButtonPane() {
+    		
     	JPanel ctlPane = new JPanel();
     	ctlPane.setLayout(new FlowLayout());
-    	ctlPane.add(btnPrev);
-    	ctlPane.add(btnNext);
-    	ctlPane.add(btnSave);
-    	ctlPane.add(btnQuit);
-    	add(ctlPane, BorderLayout.PAGE_END);
-    	
-    	setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
-    	pack();
-    	setVisible(true);
+    	ctlPane.add(new JButton("Prev"));
+    	ctlPane.add(new JButton("Next"));
+    	ctlPane.add(new JButton("Copy"));
+    	ctlPane.add(new JButton("Save"));
+    	ctlPane.add(new JButton("Quit"));
+		return ctlPane;
 	}
 	
-	void addLabelText(JLabel[] labels, JComponent[] fields, Container container) {
+	private void addLabelText(JLabel[] labels, JComponent[] fields, Container container) {
 		GridBagConstraints c = new GridBagConstraints();
 		c.anchor = GridBagConstraints.EAST;
 		
