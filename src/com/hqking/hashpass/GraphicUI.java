@@ -4,15 +4,18 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GraphicsConfiguration;
+import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
@@ -27,6 +30,8 @@ public class GraphicUI extends JFrame implements Runnable {
 	 */
 	private static final long serialVersionUID = -1977703648719134928L;
 
+	private JFrame frame;
+	
 	public GraphicUI() throws HeadlessException {
 		// TODO Auto-generated constructor stub
 	}
@@ -39,6 +44,8 @@ public class GraphicUI extends JFrame implements Runnable {
 	public GraphicUI(String arg0) throws HeadlessException {
 		super(arg0);
 		// TODO Auto-generated constructor stub
+		
+		frame = this;
 	}
 
 	public GraphicUI(String arg0, GraphicsConfiguration arg1) {
@@ -46,13 +53,19 @@ public class GraphicUI extends JFrame implements Runnable {
 		// TODO Auto-generated constructor stub
 	}
 
+	private static final String CMD_KEYSAVE = "OK";
+	private static final String CMD_ADD = "ADD";
+	
 	class Test implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 	        String cmd = e.getActionCommand();
 
-	        if (cmd.equals("OK")) { //Process the password.
+	        if (cmd.equals(CMD_KEYSAVE)) { //Process the password.
 	            char[] input = pwdField.getPassword();
 	            System.out.println(input);
+	        } else if (cmd.equals(CMD_ADD)) {
+	        	SiteInfo dialog = new SiteInfo(frame);
+	        	
 	        }
 	    }	
 	}
@@ -72,14 +85,17 @@ public class GraphicUI extends JFrame implements Runnable {
 		
 		pwdField = new JPasswordField(20);
 		pwdField.setOpaque(true);
-		pwdField.setActionCommand("OK");
+		pwdField.setActionCommand(CMD_KEYSAVE);
 		pwdField.addActionListener(tt);
 		JLabel label = new JLabel("Master key: ");
 		label.setLabelFor(pwdField);
 		
 		JButton btnAdd = new JButton("Add");
+		btnAdd.setActionCommand(CMD_ADD);
+		btnAdd.addActionListener(tt);
+		
 		JButton btnSave = new JButton("Save");
-		btnSave.setActionCommand("OK");
+		btnSave.setActionCommand(CMD_KEYSAVE);
 		btnSave.addActionListener(tt);
 		
 		JToolBar toolBar = new JToolBar("tools");
