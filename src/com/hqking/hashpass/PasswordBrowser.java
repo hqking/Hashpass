@@ -7,21 +7,88 @@ import java.awt.GraphicsConfiguration;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JMenuBar;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 
 public class PasswordBrowser extends JFrame implements Runnable {
+	private class EntryList extends AbstractTableModel implements
+			TableModelListener {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		private final String[] columnName = {
+			"Description", "Length", "Type", "Bump"
+		};
+		
+		private int row;
+		private String[][] cells;
+		
+		public EntryList() {
+			List<Site> entries = Hashpass.search("%");
+						
+			if (entries != null) {
+				cells = new String[entries.size()][columnName.length];
+				
+				for(int i = 0; i < entries.size(); i++) {
+					Site s = entries.get(i);
+					
+					cells[i][0] = s.description;
+					cells[i][1] = String.format("%d", s.length);
+					cells[i][2] = s.type;
+					cells[i][3] = String.format("%d", s.bump);
+				}
+				
+				row = entries.size();
+			} else {
+				row = 0;
+			}
+		}
+
+		@Override
+		public int getColumnCount() {
+			return columnName.length;
+		}
+		
+		@Override
+		public String getColumnName(int columnIndex) {
+			return columnName[columnIndex];
+		}
+
+		@Override
+		public int getRowCount() {
+			return row;
+		}
+
+		@Override
+		public Object getValueAt(int arg0, int arg1) {
+			return cells[arg0][arg1];
+		}
+
+		@Override
+		public void tableChanged(TableModelEvent arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+	}
+
 	/**
 	 * 
 	 */
@@ -101,11 +168,10 @@ public class PasswordBrowser extends JFrame implements Runnable {
 	}
 
 	private JScrollPane addSiteList() {
-		String test[] = {"jin yifeng", "hqking", "xiaodu", "papa", "qinqin"};
-		JList<String> list = new JList<String>(test);
+		JTable list = new JTable(new EntryList());
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		list.setLayoutOrientation(JList.VERTICAL);
-		
+		list.setFillsViewportHeight(true);
+				
 		JScrollPane listScroller = new JScrollPane(list);
 		listScroller.setPreferredSize(new Dimension(250, 80));
 		return listScroller;

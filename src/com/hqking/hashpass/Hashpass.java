@@ -1,13 +1,23 @@
 package com.hqking.hashpass;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 public class Hashpass {
 	private static StorageSqlite db;
 	
-	static void save(Site site) {
-		db.save(site);
+	static int save(Site site) {
+		return db.save(site);
 	}
+	
+	static List<Site> search(String pattern) {
+		return db.search(pattern);
+	}
+	
+	static Site find(String desc) {
+		return db.find(desc);
+	}
+
 	
 	/**
 	 * @param args

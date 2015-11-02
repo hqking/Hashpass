@@ -1,12 +1,12 @@
 package com.hqking.hashpass;
 
-import java.util.Set;
+import java.util.List;
 
 
 public interface Storage {
 	int save(Site site);
 	
-	Set<Site> search(String pattern);
+	List<Site> search(String pattern);
 	
 	Site find(String desc);
 }

@@ -6,7 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 class StorageSqlite implements Storage {
 	private Connection connection = null;
@@ -27,7 +28,9 @@ class StorageSqlite implements Storage {
 
 			stat.executeUpdate(table);
 			
-			select = connection.prepareStatement("select * from site where description = ?");
+			select = connection.prepareStatement("select " +
+					"description, length, type, bump" +
+					" from site where description like ?");
 			
 			insert = connection.prepareStatement("insert or replace into site " +
 					"(description, bump, length, type)" +
@@ -59,9 +62,27 @@ class StorageSqlite implements Storage {
 	}
 
 	@Override
-	public Set<Site> search(String pattern) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Site> search(String pattern) {
+		try {
+			ArrayList<Site> sites = new ArrayList<Site>();
+			
+			select.setString(1, pattern);
+			ResultSet rs = select.executeQuery();
+			
+			while (rs.next()) {
+				Site site = new Site(rs.getString("type"), rs.getInt("length"));
+				site.bump = rs.getInt("bump");
+				site.description = rs.getString("description");
+				
+				sites.add(site);
+			}
+			
+			return sites;
+		} catch (SQLException e) {
+			System.out.println("can't find " + pattern);
+			
+			return null;
+		}
 	}
 
 	@Override
