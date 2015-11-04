@@ -4,7 +4,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public class Hashpass {
-	private static StorageSqlite db;
+	static StorageSqlite db;
 	
 	static int save(Site site) {
 		return db.save(site);
@@ -42,6 +42,7 @@ public class Hashpass {
 		System.out.printf("score: %d\n", validator.score());
 		
 		db = new StorageSqlite("test.db");
+		db.sync();
 		
 		Site ccb = db.find("ccb");
 		if (ccb != null) {

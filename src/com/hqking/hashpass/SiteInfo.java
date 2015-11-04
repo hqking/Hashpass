@@ -254,6 +254,8 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener {
 			saveButton.setEnabled(false);
 			Hashpass.save(site);
 			
+			
+			
 		} else if (cmd.equals(CMD_COPY)) {
 			
 		} else if (cmd.equals(CMD_PREV)) {

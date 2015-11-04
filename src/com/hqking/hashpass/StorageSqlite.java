@@ -9,7 +9,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-class StorageSqlite implements Storage {
+import javax.swing.table.AbstractTableModel;
+
+class StorageSqlite extends AbstractTableModel
+					implements Storage {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Connection connection = null;
 	private PreparedStatement select = null;
 	private PreparedStatement insert = null;
@@ -53,6 +60,20 @@ class StorageSqlite implements Storage {
 			
 			insert.executeUpdate();
 			
+			if (rowNumber < PAGE_SIZE) {
+				cells[rowNumber] = new String[columnName.length];
+				
+				cells[rowNumber][0] = site.description;
+				cells[rowNumber][1] = String.format("%d", site.length);
+				cells[rowNumber][2] = site.type;
+				cells[rowNumber][3] = String.format("%d", site.bump);
+		
+				rowNumber++;
+
+				fireTableRowsInserted(rowNumber - 1, rowNumber - 1);
+				
+			}
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -76,6 +97,8 @@ class StorageSqlite implements Storage {
 				
 				sites.add(site);
 			}
+			
+			rs.close();
 			
 			return sites;
 		} catch (SQLException e) {
@@ -111,4 +134,62 @@ class StorageSqlite implements Storage {
 		return site;
 	}
 
+	private final String[] columnName = {
+			"Description", "Length", "Type", "Bump"
+	};
+
+	private int rowNumber;
+	
+	private String[][] cells;
+	
+	@Override
+	public int getColumnCount() {
+		return columnName.length;
+	}
+
+	@Override
+	public String getColumnName(int columnIndex) {
+		return columnName[columnIndex];
+	}
+
+	@Override
+	public int getRowCount() {
+		return rowNumber;
+	}
+
+	@Override
+	public Object getValueAt(int arg0, int arg1) {
+		return cells[arg0][arg1];
+	}
+
+	private static final int PAGE_SIZE = 50;
+	
+	public void sync() {
+		try {
+			select.setString(1, "%");
+			ResultSet rs = select.executeQuery();
+					
+			cells = new String[PAGE_SIZE][];
+			
+			rowNumber = 0;
+			while (rs.next()) {
+				cells[rowNumber] = new String[columnName.length];
+				
+				cells[rowNumber][0] = rs.getString("description");
+				cells[rowNumber][1] = String.format("%d", rs.getInt("length"));
+				cells[rowNumber][2] = rs.getString("type");
+				cells[rowNumber][3] = String.format("%d", rs.getInt("bump"));
+				
+				rowNumber++;
+				if (rowNumber >= PAGE_SIZE)
+					break;
+			}
+			
+			rs.close();
+		} catch (SQLException e) {
+			System.out.println("sync failed" + e);
+			
+			rowNumber = 0;
+		}
+	}
 }
