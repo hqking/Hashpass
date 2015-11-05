@@ -31,9 +31,11 @@ public class PasswordBrowser extends JFrame implements Runnable {
 					e.getClickCount() == 2) {
 				int row = list.rowAtPoint(e.getPoint());
 				
-				Site site = Hashpass.db.getSitebyRow(row); 
+				if (row != -1) {
+					Site site = Hashpass.db.getSitebyRow(row); 
 				
-				new SiteInfo(frame, site);
+					new SiteInfo(frame, site);
+				}
 			}
 		}
 
