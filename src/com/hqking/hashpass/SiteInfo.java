@@ -69,7 +69,7 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener {
     	
     	add(addPasswordPane(), BorderLayout.CENTER);
     	
-    	setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+    	setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
     	pack();
 		setVisible(true);
 	}
@@ -252,7 +252,7 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener {
 			showPassword();
 			
 		} else if (cmd.equals(CMD_QUITE)) {
-			setVisible(false);
+			dispose();
 			
 		} else if (cmd.equals(CMD_SAVE)) {
 			saveButton.setEnabled(false);
