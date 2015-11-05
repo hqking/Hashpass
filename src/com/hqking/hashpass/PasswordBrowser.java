@@ -7,7 +7,8 @@ import java.awt.GraphicsConfiguration;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -19,20 +20,46 @@ import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 
 public class PasswordBrowser extends JFrame implements Runnable {
+	private class PasswordEntryMouseListener implements MouseListener {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			if (e.getButton() == MouseEvent.BUTTON1 &&
+					e.getClickCount() == 2) {
+				int row = list.rowAtPoint(e.getPoint());
+				
+				Site site = Hashpass.db.getSitebyRow(row); 
+				
+				new SiteInfo(frame, site);
+			}
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {
+		}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) {
+		}
+
+		@Override
+		public void mousePressed(MouseEvent arg0) {
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) {
+		}
+	}
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1977703648719134928L;
 
 	private JFrame frame;
-	private SiteInfo dialog;
 	
 	public PasswordBrowser() throws HeadlessException {
 		// TODO Auto-generated constructor stub
@@ -47,7 +74,6 @@ public class PasswordBrowser extends JFrame implements Runnable {
 		super(arg0);
 
 		frame = this;
-		dialog = new SiteInfo(frame);
 	}
 
 	public PasswordBrowser(String arg0, GraphicsConfiguration arg1) {
@@ -66,7 +92,7 @@ public class PasswordBrowser extends JFrame implements Runnable {
 	            char[] input = pwdField.getPassword();
 	            System.out.println(input);
 	        } else if (cmd.equals(CMD_ADD)) {
-	        	dialog.setVisible(true);
+	        	new SiteInfo(frame);
 	        }
 	    }	
 	}
@@ -102,11 +128,13 @@ public class PasswordBrowser extends JFrame implements Runnable {
 		JScrollPane treeScroller = new JScrollPane(tree);
 		return treeScroller;
 	}
-
+	
+	private JTable list;
 	private JScrollPane addSiteList() {
-		JTable list = new JTable(Hashpass.db);
+		list = new JTable(Hashpass.db);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setFillsViewportHeight(true);
+		list.addMouseListener(new PasswordEntryMouseListener());
 		
 		JScrollPane listScroller = new JScrollPane(list);
 		listScroller.setPreferredSize(new Dimension(250, 80));

@@ -13,15 +13,19 @@ class Site {
 	
 	private static final int DEFAULT_PASSWORD_LENGTH = 8;
 	
-	Site(String type, int length) {
+	Site(String type, int length, int bump) {
 		createTime = LocalTime.now();
 		this.length = length;
 		this.type = type;
-		bump = 0;
+		this.bump = bump;		
+	}
+	
+	Site(String type, int length) {
+		this(type, length, 0);
 	}
 	
 	Site(String type) {
-		this(type, DEFAULT_PASSWORD_LENGTH);
+		this(type, DEFAULT_PASSWORD_LENGTH, 0);
 	}
 	
 	String password() {

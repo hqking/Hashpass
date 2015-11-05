@@ -142,6 +142,13 @@ class StorageSqlite extends AbstractTableModel
 	
 	private String[][] cells;
 	
+	public Site getSitebyRow(int row) {
+		if (row < rowNumber)
+			return find(cells[row][0]);
+		else
+			return null;
+	}
+	
 	@Override
 	public int getColumnCount() {
 		return columnName.length;

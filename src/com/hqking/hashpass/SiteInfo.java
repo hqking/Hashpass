@@ -53,9 +53,11 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener {
 	
 	private Site site;
 	
-	public SiteInfo(Frame frame) {
+	public SiteInfo(Frame frame, Site site) {
 		super(frame);
-				
+
+		this.site = site;
+		
     	BorderLayout layout = new BorderLayout();
     	setLayout(layout);
 
@@ -63,16 +65,21 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener {
     	
     	add(addQualityPane(), BorderLayout.LINE_END);
 
-    	add(addPasswordPane(), BorderLayout.CENTER);
-    	
     	add(addButtonPane(), BorderLayout.PAGE_END);
+    	
+    	add(addPasswordPane(), BorderLayout.CENTER);
     	
     	setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
     	pack();
+		setVisible(true);
+	}
+	
+	public SiteInfo(Frame frame) {
+		this(frame, new Site(INIT_PATTERN, INIT_LENGTH, INIT_BUMP));
 	}
 
 	private JPanel addInputPane() {
-		descField = new JTextField(30);
+		descField = new JTextField(site.description, 30);
 		descField.setActionCommand(CMD_DESC);
 		descField.addActionListener(this);
 		JLabel descLabel = new JLabel("Site description: ");
@@ -134,9 +141,6 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener {
 	}
 
 	private JLabel addPasswordPane() {
-		site = new Site(INIT_PATTERN, INIT_LENGTH);
-		site.bump = INIT_BUMP;
-		
 		passwordLabel = new JLabel("calculated password");
 		showPassword();
     	passwordLabel.setBorder(
