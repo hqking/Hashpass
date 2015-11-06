@@ -113,6 +113,8 @@ public class PasswordBrowser extends JFrame implements Runnable {
 		add(addTagTree(), BorderLayout.LINE_START);
 		
 		pack();
+		
+		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 

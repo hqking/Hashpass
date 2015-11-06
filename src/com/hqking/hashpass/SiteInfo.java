@@ -69,8 +69,9 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener {
     	
     	add(addPasswordPane(), BorderLayout.CENTER);
     	
-    	setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
     	pack();
+    	setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+    	setLocationRelativeTo(frame);
 		setVisible(true);
 	}
 	
