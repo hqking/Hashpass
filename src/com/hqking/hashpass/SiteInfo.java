@@ -24,8 +24,10 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
-class SiteInfo extends JDialog implements ActionListener, ChangeListener {
+class SiteInfo extends JDialog implements ActionListener, ChangeListener, DocumentListener {
 	/**
 	 * 
 	 */
@@ -83,6 +85,7 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener {
 		descField = new JTextField(site.description, 30);
 		descField.setActionCommand(CMD_DESC);
 		descField.addActionListener(this);
+		descField.getDocument().addDocumentListener(this);
 		JLabel descLabel = new JLabel("Site description: ");
 		descLabel.setLabelFor(descField);
 		
@@ -283,5 +286,23 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener {
 			site.bump = (int)bumpField.getModel().getValue();
 			showPassword();
 		}
+	}
+
+	@Override
+	public void changedUpdate(DocumentEvent arg0) {
+		site.description = descField.getText();
+		showPassword();
+	}
+
+	@Override
+	public void insertUpdate(DocumentEvent arg0) {
+		site.description = descField.getText();
+		showPassword();
+	}
+
+	@Override
+	public void removeUpdate(DocumentEvent arg0) {
+		site.description = descField.getText();
+		showPassword();
 	}
 }
