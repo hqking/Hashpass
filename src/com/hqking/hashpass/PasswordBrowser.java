@@ -90,9 +90,14 @@ public class PasswordBrowser extends JFrame implements Runnable {
 		public void actionPerformed(ActionEvent e) {
 	        String cmd = e.getActionCommand();
 
-	        if (cmd.equals(CMD_KEYSAVE)) { //Process the password.
+	        if (cmd.equals(CMD_KEYSAVE)) {
 	            char[] input = pwdField.getPassword();
-	            System.out.println(input);
+	            Generator.setKey(new String(input));
+	            
+	            // for security reason, clear bytes to zero
+	            for (int i = 0; i < input.length; i++) {
+	            	input[i] = 0;
+	            }
 	        } else if (cmd.equals(CMD_ADD)) {
 	        	new SiteInfo(frame);
 	        }

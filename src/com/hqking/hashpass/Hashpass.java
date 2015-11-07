@@ -24,7 +24,7 @@ public class Hashpass {
 	 * @throws NoSuchAlgorithmException 
 	 */
 	public static void main(String[] args) throws NoSuchAlgorithmException {
-		Generator.init("hqking");
+		Generator.init("");
 		
 		Site site = new Site("printableAscii", 12);
 		site.bump = 0;
