@@ -8,10 +8,15 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -21,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -67,9 +73,12 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener, Docume
     	
     	add(addQualityPane(), BorderLayout.LINE_END);
 
-    	add(addButtonPane(), BorderLayout.PAGE_END);
+    	JPanel panel = addButtonPane();
+    	add(panel, BorderLayout.PAGE_END);
     	
     	add(addPasswordPane(), BorderLayout.CENTER);
+    	
+    	
     	
     	pack();
     	setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -190,6 +199,38 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener, Docume
     	btn.addActionListener(this);
     	btn.setMnemonic(KeyEvent.VK_Q);
     	ctlPane.add(btn);
+    	
+    	InputMap im = ctlPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+    	ActionMap am = ctlPane.getActionMap();
+
+    	im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), CMD_QUITE);
+    	am.put(CMD_QUITE, new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+			}
+    	});
+    	
+    	im.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK), CMD_SAVE);
+    	am.put(CMD_SAVE, new AbstractAction() {
+    		private static final long serialVersionUID = 1L;
+    		@Override
+    		public void actionPerformed(ActionEvent arg0) {
+    			saveButton.setEnabled(false);
+    			Hashpass.save(site);
+    		}
+    	});
+    	
+    	im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK), CMD_COPY);
+    	am.put(CMD_COPY, new AbstractAction() {
+    		private static final long serialVersionUID = 1L;
+    		@Override
+    		public void actionPerformed(ActionEvent arg0) {
+    			
+    		}
+    	});
+    	
 		return ctlPane;
 	}
 	
@@ -261,8 +302,6 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener, Docume
 		} else if (cmd.equals(CMD_SAVE)) {
 			saveButton.setEnabled(false);
 			Hashpass.save(site);
-			
-			
 			
 		} else if (cmd.equals(CMD_COPY)) {
 			
