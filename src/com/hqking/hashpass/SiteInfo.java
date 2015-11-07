@@ -6,6 +6,11 @@ import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -32,14 +37,15 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-class SiteInfo extends JDialog implements ActionListener, ChangeListener, DocumentListener {
+class SiteInfo extends JDialog 
+implements ActionListener, ChangeListener, DocumentListener, ClipboardOwner {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6226076328845503856L;
 	private static final String CMD_DESC = "description_command";
 	private static final String CMD_PATTERN = "pattern_command";
-	private static final String CMD_QUITE = "quite_command";
+	private static final String CMD_QUIT = "quite_command";
 	private static final String CMD_SAVE = "save_command";
 	private static final String CMD_COPY = "copy_command";
 	private static final String CMD_PREV = "prev_command";
@@ -59,6 +65,7 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener, Docume
 	private JButton saveButton;
 	
 	private Site site;
+	private boolean inClipboard = false;
 	
 	public SiteInfo(Frame frame, Site site) {
 		super(frame);
@@ -72,15 +79,12 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener, Docume
     	
     	add(addQualityPane(), BorderLayout.LINE_END);
 
-    	JPanel panel = addButtonPane();
-    	add(panel, BorderLayout.PAGE_END);
+    	add(addButtonPane(), BorderLayout.PAGE_END);
     	
     	add(addPasswordPane(), BorderLayout.CENTER);
     	
-    	
-    	
     	pack();
-    	setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+    	setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
     	setLocationRelativeTo(frame);
 		setVisible(true);
 	}
@@ -194,7 +198,7 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener, Docume
     	ctlPane.add(saveButton);
     	
     	btn = new JButton("Quit");
-    	btn.setActionCommand(CMD_QUITE);
+    	btn.setActionCommand(CMD_QUIT);
     	btn.addActionListener(this);
     	btn.setMnemonic(KeyEvent.VK_Q);
     	ctlPane.add(btn);
@@ -202,34 +206,15 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener, Docume
     	InputMap im = ctlPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
     	ActionMap am = ctlPane.getActionMap();
 
-    	im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), CMD_QUITE);
-    	am.put(CMD_QUITE, new AbstractAction() {
+    	im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), CMD_QUIT);
+    	am.put(CMD_QUIT, new AbstractAction() {
 			private static final long serialVersionUID = 1L;
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				dispose();
+				quitAction();
 			}
     	});
-    	
-    	im.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK), CMD_SAVE);
-    	am.put(CMD_SAVE, new AbstractAction() {
-    		private static final long serialVersionUID = 1L;
-    		@Override
-    		public void actionPerformed(ActionEvent arg0) {
-    			saveButton.setEnabled(false);
-    			Hashpass.save(site);
-    		}
-    	});
-    	
-    	im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK), CMD_COPY);
-    	am.put(CMD_COPY, new AbstractAction() {
-    		private static final long serialVersionUID = 1L;
-    		@Override
-    		public void actionPerformed(ActionEvent arg0) {
-    			
-    		}
-    	});
-    	
+    	    	
 		return ctlPane;
 	}
 	
@@ -283,6 +268,15 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener, Docume
 		}
 	}
 	
+	private void quitAction() {
+		if (inClipboard) {
+			Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+			clipboard.setContents(new StringSelection(""), null);
+			inClipboard = false;
+		}
+		dispose();
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
@@ -295,14 +289,18 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener, Docume
 			site.type = (String)patternSel.getSelectedItem();
 			showPassword();
 			
-		} else if (cmd.equals(CMD_QUITE)) {
-			dispose();
+		} else if (cmd.equals(CMD_QUIT)) {
+			quitAction();
 			
 		} else if (cmd.equals(CMD_SAVE)) {
 			saveButton.setEnabled(false);
 			Hashpass.save(site);
 			
 		} else if (cmd.equals(CMD_COPY)) {
+			Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+			StringSelection selection = new StringSelection(passwordLabel.getText());
+			clipboard.setContents(selection, selection);
+			inClipboard = true;
 			
 		} else if (cmd.equals(CMD_PREV)) {
 			
@@ -342,5 +340,10 @@ class SiteInfo extends JDialog implements ActionListener, ChangeListener, Docume
 	public void removeUpdate(DocumentEvent arg0) {
 		site.description = descField.getText();
 		showPassword();
+	}
+
+	@Override
+	public void lostOwnership(Clipboard clipboard, Transferable contents) {
+		inClipboard = false;
 	}
 }
