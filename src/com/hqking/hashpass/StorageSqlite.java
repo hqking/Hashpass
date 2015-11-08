@@ -43,6 +43,11 @@ class StorageSqlite extends AbstractTableModel
 					"(description, bump, length, type)" +
 					"values (?, ?, ?, ?);");
 			
+			cells = new String[PAGE_SIZE][];
+			for (int i = 0; i < PAGE_SIZE; i++) {
+				cells[i] = new String[columnName.length];
+			}
+			
 		} catch (SQLException e) {
 			
 			// TODO Auto-generated catch block
@@ -60,19 +65,8 @@ class StorageSqlite extends AbstractTableModel
 			
 			insert.executeUpdate();
 			
-			if (rowNumber < PAGE_SIZE) {
-				cells[rowNumber] = new String[columnName.length];
-				
-				cells[rowNumber][0] = site.description;
-				cells[rowNumber][1] = String.format("%d", site.length);
-				cells[rowNumber][2] = site.type;
-				cells[rowNumber][3] = String.format("%d", site.bump);
-		
-				rowNumber++;
-
-				fireTableRowsInserted(rowNumber - 1, rowNumber - 1);
-				
-			}
+			sync();
+			fireTableDataChanged();
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -176,12 +170,8 @@ class StorageSqlite extends AbstractTableModel
 			select.setString(1, "%");
 			ResultSet rs = select.executeQuery();
 					
-			cells = new String[PAGE_SIZE][];
-			
 			rowNumber = 0;
 			while (rs.next()) {
-				cells[rowNumber] = new String[columnName.length];
-				
 				cells[rowNumber][0] = rs.getString("description");
 				cells[rowNumber][1] = String.format("%d", rs.getInt("length"));
 				cells[rowNumber][2] = rs.getString("type");
