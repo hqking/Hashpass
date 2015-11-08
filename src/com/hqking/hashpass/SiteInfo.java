@@ -28,6 +28,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
@@ -72,12 +73,14 @@ WindowListener {
 	private JButton saveButton;
 	
 	private Site site;
+	private Site originalSite;
 	private boolean inClipboard = false;
 	
 	public SiteInfo(Frame frame, Site site) {
 		super(frame);
 
 		this.site = site;
+		originalSite = site.copy();
 		
     	BorderLayout layout = new BorderLayout();
     	setLayout(layout);
@@ -282,7 +285,27 @@ WindowListener {
 			clipboard.setContents(new StringSelection(""), null);
 			inClipboard = false;
 		}
-		dispose();
+		
+		if (site.compareTo(originalSite) != 0) {
+			String[] options = {"yes", "no", "cancel"};
+			int n = JOptionPane.showOptionDialog(this, 
+					"unsaved change, would you like to save before quit?", "unsaved site", 
+					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, 
+					null, options, options[2]);
+			switch (n) {
+			case JOptionPane.YES_OPTION:
+				Hashpass.save(site);
+			case JOptionPane.NO_OPTION:
+				dispose();
+				break;
+			case JOptionPane.CANCEL_OPTION:
+			case JOptionPane.CLOSED_OPTION:
+			default:
+				;
+			}
+		} else {
+			dispose();
+		}
 	}
 	
 	@Override
@@ -302,6 +325,7 @@ WindowListener {
 			
 		} else if (cmd.equals(CMD_SAVE)) {
 			saveButton.setEnabled(false);
+			originalSite = site.copy();
 			Hashpass.save(site);
 			
 		} else if (cmd.equals(CMD_COPY)) {
