@@ -112,7 +112,7 @@ WindowListener {
 		JLabel descLabel = new JLabel("Site description: ");
 		descLabel.setLabelFor(descField);
 		
-		lengthSlider = new JSlider(JSlider.HORIZONTAL, 4, 24, INIT_LENGTH);
+		lengthSlider = new JSlider(JSlider.HORIZONTAL, 4, 24, site.length);
 		lengthSlider.setMajorTickSpacing(4);
 		lengthSlider.setMinorTickSpacing(1);
 		lengthSlider.setPaintTicks(true);
@@ -121,7 +121,7 @@ WindowListener {
 		JLabel lengthLabel = new JLabel("Length: ");
 		lengthLabel.setLabelFor(lengthSlider);
 		
-		bumpField = new JSpinner(new SpinnerNumberModel(INIT_BUMP, 0, 65535, 1));
+		bumpField = new JSpinner(new SpinnerNumberModel(site.bump, 0, 65535, 1));
 		bumpField.addChangeListener(this);
 		JLabel bumpLabel = new JLabel("Retry: ");
 		bumpLabel.setLabelFor(bumpField);
@@ -135,6 +135,7 @@ WindowListener {
 				Generator.TABLE_ALPHA_NUMERIC,
 				Generator.TABLE_NUMBERS_ONLY};
 		patternSel = new JComboBox<String>(patterns);
+		patternSel.setSelectedItem(site.type);
 		patternSel.setActionCommand(CMD_PATTERN);
 		patternSel.addActionListener(this);
 		JLabel patternLabel = new JLabel("Patterns: ");
