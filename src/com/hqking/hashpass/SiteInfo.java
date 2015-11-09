@@ -276,7 +276,11 @@ WindowListener {
 				commentLabel.setText("very strong");
 			}
 			
-			saveButton.setEnabled(true);
+			if (site.compareTo(originalSite) != 0) {
+				saveButton.setEnabled(true);
+			} else {
+				saveButton.setEnabled(false);
+			}
 		}
 	}
 	
