@@ -20,6 +20,7 @@ class StorageSqlite extends AbstractTableModel
 	private Connection connection = null;
 	private PreparedStatement select = null;
 	private PreparedStatement insert = null;
+	private PreparedStatement delete = null;
 	
 	StorageSqlite(String file) {	
 		try {
@@ -42,6 +43,9 @@ class StorageSqlite extends AbstractTableModel
 			insert = connection.prepareStatement("insert or replace into site " +
 					"(description, bump, length, type)" +
 					"values (?, ?, ?, ?);");
+			
+			delete = connection.prepareStatement("delete from site "
+					+ "where description = ?");
 			
 			cells = new String[PAGE_SIZE][];
 			for (int i = 0; i < PAGE_SIZE; i++) {
@@ -70,6 +74,23 @@ class StorageSqlite extends AbstractTableModel
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return 0;
+	}
+	
+	@Override
+	public int delete(Site site) {
+		try {
+			delete.setString(1, site.description);
+			
+			delete.executeUpdate();
+			
+			sync();
+			fireTableDataChanged();
+			
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		

@@ -85,6 +85,7 @@ public class PasswordBrowser extends JFrame implements Runnable {
 
 	private static final String CMD_KEYSAVE = "OK";
 	private static final String CMD_ADD = "ADD";
+	private static final String CMD_DELETE = "DEL";
 	
 	class Test implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
@@ -100,6 +101,10 @@ public class PasswordBrowser extends JFrame implements Runnable {
 	            }
 	        } else if (cmd.equals(CMD_ADD)) {
 	        	new SiteInfo(frame);
+	        } else if (cmd.equals(CMD_DELETE)) {
+	        	int row = list.getSelectedRow();
+	        	if (row != -1)
+	        		Hashpass.delete(Hashpass.db.getSitebyRow(row));
 	        }
 	    }	
 	}
@@ -173,8 +178,13 @@ public class PasswordBrowser extends JFrame implements Runnable {
 		btnSave.setActionCommand(CMD_KEYSAVE);
 		btnSave.addActionListener(tt);
 		
+		JButton btnDel = new JButton("Del");
+		btnDel.setActionCommand(CMD_DELETE);
+		btnDel.addActionListener(tt);
+		
 		JToolBar toolBar = new JToolBar("tools");
 		toolBar.add(btnAdd);
+		toolBar.add(btnDel);
 		toolBar.addSeparator(new Dimension(40, 0));
 		toolBar.add(label);
 		toolBar.add(pwdField);

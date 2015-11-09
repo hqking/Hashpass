@@ -17,6 +17,10 @@ public class Hashpass {
 	static Site find(String desc) {
 		return db.find(desc);
 	}
+	
+	static int delete(Site site) {
+		return db.delete(site);
+	}
 
 	
 	/**
