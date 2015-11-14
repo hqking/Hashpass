@@ -100,7 +100,8 @@ public class PasswordBrowser extends JFrame implements Runnable {
 	            	input[i] = 0;
 	            }
 	        } else if (cmd.equals(CMD_ADD)) {
-	        	new SiteInfo(frame);
+	        	//new SiteInfo(frame);
+	        	new SiteController(new Site(Generator.TABLE_PRINTALBE_ASCII));
 	        } else if (cmd.equals(CMD_DELETE)) {
 	        	int row = list.getSelectedRow();
 	        	if (row != -1)
