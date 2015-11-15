@@ -50,10 +50,10 @@ class Site implements Comparable<Site> {
 
 	@Override
 	public int compareTo(Site o) {
-		if (o.description == description &&
+		if (o.description.equals(description) &&
 				o.bump == bump &&
 				o.length == length &&
-				o.type == type) {
+				o.type.equals(type)) {
 			return 0;
 		} else {
 			return -1;
