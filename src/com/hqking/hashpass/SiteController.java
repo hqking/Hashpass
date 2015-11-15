@@ -53,7 +53,7 @@ class SiteController {
 		btnSave = view.getBtnSave();
 		//btnQuit = view.getBtnQuit();
 		
-		textDescription.setToolTipText(site.description);
+		textDescription.setText(site.description);
 		sliderLength.setValue(site.length);
 		comboPatternSelector.setSelectedItem(site.type);
 		spinner.setValue(site.bump);

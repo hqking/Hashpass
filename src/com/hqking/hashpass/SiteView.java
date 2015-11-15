@@ -54,6 +54,7 @@ public class SiteView extends JPanel {
 	 * Create the panel.
 	 */
 	public SiteView(SiteController ctl) {
+		setPreferredSize(new Dimension(500, 300));
 		controller = ctl;
 		
 		setLayout(new BorderLayout(0, 0));
