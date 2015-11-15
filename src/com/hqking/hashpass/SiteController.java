@@ -109,10 +109,12 @@ class SiteController {
 	}
 	
 	public void btnCopyPressed() {
-		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-		StringSelection selection = new StringSelection(lblPassword.getText());
-		clipboard.setContents(selection, selection);
-		inClipboard = true;
+		if (site.description.length() > 0) {
+			Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+			StringSelection selection = new StringSelection(realPwd);
+			clipboard.setContents(selection, selection);
+			inClipboard = true;
+		}
 	}
 	
 	public void btnQuitPressed() {
