@@ -45,6 +45,10 @@ public class SiteView extends JPanel {
 	private JComboBox<String> comboPatternSelector;
 	private JSpinner spinner;
 	private SiteController controller;
+	private JToggleButton tglbtnShow;
+	private JButton btnCopy;
+	private JButton btnSave;
+	private JButton btnQuit;
 	
 	/**
 	 * Create the panel.
@@ -182,23 +186,39 @@ public class SiteView extends JPanel {
 		add(buttonPane, BorderLayout.SOUTH);
 		buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 		
-		JToggleButton tglbtnShow = new JToggleButton("Show");
+		tglbtnShow = new JToggleButton("Show");
+		tglbtnShow.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				controller.btnShowPressed();
+			}
+		});
 		tglbtnShow.setSelected(true);
 		buttonPane.add(tglbtnShow);
 		
-		JButton btnCopy = new JButton("Copy");
+		btnCopy = new JButton("Copy");
 		btnCopy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				controller.btnCopyPressed();
 			}
 		});
 		btnCopy.setMnemonic('C');
 		buttonPane.add(btnCopy);
 		
-		JButton btnSave = new JButton("Save");
+		btnSave = new JButton("Save");
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.btnSavePressed();
+			}
+		});
 		btnSave.setMnemonic('S');
 		buttonPane.add(btnSave);
 		
-		JButton btnQuit = new JButton("Quit");
+		btnQuit = new JButton("Quit");
+		btnQuit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.btnQuitPressed();
+			}
+		});
 		btnQuit.setMnemonic('Q');
 		buttonPane.add(btnQuit);
 		
@@ -306,5 +326,17 @@ public class SiteView extends JPanel {
 	}
 	JTextField getTextDescription() {
 		return textDescription;
+	}
+	public JToggleButton getTglbtnShow() {
+		return tglbtnShow;
+	}
+	public JButton getBtnCopy() {
+		return btnCopy;
+	}
+	public JButton getBtnSave() {
+		return btnSave;
+	}
+	public JButton getBtnQuit() {
+		return btnQuit;
 	}
 }
