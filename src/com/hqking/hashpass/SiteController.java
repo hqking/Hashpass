@@ -26,11 +26,12 @@ class SiteController {
 	private JTextField textDescription;
 	private Site site;
 	private Site siteSaved;
+	private String realPwd;
 	private boolean inClipboard;
 	private JToggleButton tglbtnShow;
-	private JButton btnCopy;
+	//private JButton btnCopy;
 	private JButton btnSave;
-	private JButton btnQuit;
+	//private JButton btnQuit;
 	private JDialog dialog;
 	
 	SiteController(Site site) {
@@ -48,15 +49,19 @@ class SiteController {
 		textTags = view.getTextTags();
 		textDescription = view.getTextDescription();
 		tglbtnShow = view.getTglbtnShow();
-		btnCopy = view.getBtnCopy();
+		//btnCopy = view.getBtnCopy();
 		btnSave = view.getBtnSave();
-		btnQuit = view.getBtnQuit();
+		//btnQuit = view.getBtnQuit();
 		
 		textDescription.setToolTipText(site.description);
 		sliderLength.setValue(site.length);
 		comboPatternSelector.setSelectedItem(site.type);
 		spinner.setValue(site.bump);
 		btnSave.setEnabled(false);
+		if (site.description.length() == 0)
+			tglbtnShow.setSelected(true);
+		else
+			tglbtnShow.setSelected(false);
 		
 		showPassword();
 		
@@ -90,7 +95,11 @@ class SiteController {
 	}
 	
 	public void btnShowPressed() {
-		
+		if (site.description.length() > 0) {
+			maskPassword(realPwd);
+		} else {
+			lblPassword.setText("Please input description");
+		}
 	}
 	
 	public void btnSavePressed() {
@@ -110,6 +119,14 @@ class SiteController {
 		quitAction();
 	}
 	
+	private void maskPassword(String pwd) {
+		if (tglbtnShow.isSelected()) {
+			lblPassword.setText(pwd);
+		} else {
+			lblPassword.setText("***...***");
+		}
+	}
+	
 	private void showPassword() {
 		if (site.description == null || site.description.length() == 0) {
 			lblPassword.setText("Please input description");
@@ -118,7 +135,8 @@ class SiteController {
 			lblCmtData.setText("no password");
 		} else {
 			String pwd = Generator.password(site);
-			lblPassword.setText(pwd);
+			maskPassword(pwd);
+			realPwd = pwd;
 			
 			lblEntropyData.setText(String.format("%d bits", Generator.entropy(pwd, site.type)));
 			
