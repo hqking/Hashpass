@@ -28,6 +28,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.JToggleButton;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ChangeEvent;
 
 public class SiteView extends JPanel {
@@ -80,6 +82,20 @@ public class SiteView extends JPanel {
 		textDescription = new JTextField();
 		textDescription.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				controller.descriptionChanged();
+			}
+		});
+		textDescription.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void changedUpdate(DocumentEvent arg0) {
+				controller.descriptionChanged();
+			}
+			@Override
+			public void insertUpdate(DocumentEvent arg0) {
+				controller.descriptionChanged();
+			}
+			@Override
+			public void removeUpdate(DocumentEvent arg0) {
 				controller.descriptionChanged();
 			}
 		});
@@ -274,6 +290,7 @@ public class SiteView extends JPanel {
 		qualityPane.add(lblComment, gbc_lblComment);
 		
 		lblCmtData = new JLabel("Very Strong");
+		lblCmtData.setSize(new Dimension(84, 15));
 		GridBagConstraints gbc_lblCmtData = new GridBagConstraints();
 		gbc_lblCmtData.anchor = GridBagConstraints.WEST;
 		gbc_lblCmtData.insets = new Insets(0, 0, 0, 5);
@@ -292,6 +309,7 @@ public class SiteView extends JPanel {
 		pswdPane.setLayout(gbl_pswdPane);
 		
 		lblPassword = new JLabel("Pass#wo3r.@d");
+		lblPassword.setSize(new Dimension(105, 15));
 		lblPassword.setAlignmentX(Component.CENTER_ALIGNMENT);
 		lblPassword.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPassword.setFont(new Font("DejaVu Sans Mono", Font.BOLD, 16));

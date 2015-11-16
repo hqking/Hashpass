@@ -68,6 +68,7 @@ class SiteController {
 		dialog = new JDialog();
 		dialog.add(view);
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		dialog.setResizable(false);
 		dialog.pack();
 		dialog.setVisible(true);
 	}
