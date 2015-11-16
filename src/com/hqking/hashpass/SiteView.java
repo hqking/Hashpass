@@ -14,7 +14,11 @@ import java.awt.Color;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JSlider;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.InputMap;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import java.awt.Dimension;
@@ -26,11 +30,15 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JToggleButton;
+import javax.swing.KeyStroke;
+
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ChangeEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class SiteView extends JPanel {
 	/**
@@ -56,8 +64,22 @@ public class SiteView extends JPanel {
 	 * Create the panel.
 	 */
 	public SiteView(SiteController ctl) {
-		setPreferredSize(new Dimension(500, 300));
 		controller = ctl;
+		
+    	InputMap im = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+    	ActionMap am = getActionMap();
+
+    	final String CMD_QUIT = "COMMAND_QUIT"; 
+    	im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), CMD_QUIT);
+    	am.put(CMD_QUIT, new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				controller.btnQuitPressed();
+			}
+    	});
+
+		setPreferredSize(new Dimension(500, 300));
 		
 		setLayout(new BorderLayout(0, 0));
 		

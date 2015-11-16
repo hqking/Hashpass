@@ -3,6 +3,9 @@ package com.hqking.hashpass;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -67,7 +70,13 @@ class SiteController {
 		
 		dialog = new JDialog();
 		dialog.add(view);
-		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		dialog.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				quitAction();
+			}
+		});
 		dialog.setResizable(false);
 		dialog.pack();
 		dialog.setVisible(true);
