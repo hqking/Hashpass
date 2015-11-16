@@ -54,7 +54,7 @@ public class Hashpass {
 			System.out.println(ccb.entropy());
 		}
 		
-		PasswordBrowser.start();
+		BrowserView.start();
 	}
 
 }
