@@ -23,6 +23,11 @@ public class Hashpass {
 	}
 
 	
+	static void exit() {
+		Generator.clearKey();
+		System.exit(0);
+	}
+	
 	/**
 	 * @param args
 	 * @throws NoSuchAlgorithmException 

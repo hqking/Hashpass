@@ -32,6 +32,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+import java.awt.Component;
 
 public class BrowserView extends JFrame {
 
@@ -40,6 +44,8 @@ public class BrowserView extends JFrame {
 	private JPasswordField masterKeyField;
 	private JTextField searchField;
 	private JLabel lblCheck;
+	private JLabel lblTotal;
+	private JLabel lblMatch;
 
 	public static void start() {
 		EventQueue.invokeLater(new Runnable() {
@@ -60,7 +66,13 @@ public class BrowserView extends JFrame {
 	 * Create the frame.
 	 */
 	public BrowserView() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				Hashpass.exit();
+			}
+		});
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -70,6 +82,11 @@ public class BrowserView extends JFrame {
 		menuBar.add(mnFile);
 		
 		JMenuItem mntmNewSite = new JMenuItem("New");
+		mntmNewSite.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				createSite();
+			}
+		});
 		mntmNewSite.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
 		mnFile.add(mntmNewSite);
 		
@@ -77,15 +94,22 @@ public class BrowserView extends JFrame {
 		mnFile.add(separator);
 		
 		JMenuItem mntmImport = new JMenuItem("Import");
+		mntmImport.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_MASK));
 		mnFile.add(mntmImport);
 		
 		JMenuItem mntmExport = new JMenuItem("Export");
+		mntmExport.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_MASK));
 		mnFile.add(mntmExport);
 		
 		JSeparator separator_1 = new JSeparator();
 		mnFile.add(separator_1);
 		
 		JMenuItem mntmExit = new JMenuItem("Exit");
+		mntmExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Hashpass.exit();
+			}
+		});
 		mntmExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK));
 		mnFile.add(mntmExit);
 		
@@ -153,7 +177,7 @@ public class BrowserView extends JFrame {
 		JButton btnNewSite = new JButton("New");
 		btnNewSite.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				new SiteController(new Site(Generator.TABLE_PRINTALBE_ASCII));
+				createSite();
 			}
 		});
 		toolBar.add(btnNewSite);
@@ -215,19 +239,30 @@ public class BrowserView extends JFrame {
 		JSeparator separator_3 = new JSeparator();
 		statusBar.add(separator_3);
 		
-		JLabel lblTotal = new JLabel("Total 100 sites");
+		lblTotal = new JLabel("Total 100 sites");
 		statusBar.add(lblTotal);
 		
 		JSeparator separator_4 = new JSeparator();
 		statusBar.add(separator_4);
 		
-		JLabel lblMatch = new JLabel("Match 50 sites");
+		lblMatch = new JLabel("Match 50 sites");
 		statusBar.add(lblMatch);
+		contentPane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{searchField, masterKeyField}));
 	}
 	public JTable getTable() {
 		return table;
 	}
 	protected JLabel getLblCheck() {
 		return lblCheck;
+	}
+	
+	private void createSite() {
+		new SiteController(new Site(Generator.TABLE_PRINTALBE_ASCII));
+	}
+	public JLabel getLblTotal() {
+		return lblTotal;
+	}
+	public JLabel getLblMatch() {
+		return lblMatch;
 	}
 }

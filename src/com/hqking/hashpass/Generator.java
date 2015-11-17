@@ -94,6 +94,10 @@ class Generator {
 		masterKey = key;
 	}
 	
+	static void clearKey() {
+		// Todo:
+	}
+	
 	static String password(Site site) {		
 		byte hash[] = hashedWord(masterKey + site.description);
 		seed = bytes2long(hash);
