@@ -27,6 +27,7 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.AbstractListModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.BevelBorder;
 
 public class BrowserView extends JFrame {
 
@@ -154,5 +155,26 @@ public class BrowserView extends JFrame {
 		masterKeyField.setHorizontalAlignment(SwingConstants.LEFT);
 		masterKeyField.setColumns(24);
 		toolBar.add(masterKeyField);
+		
+		JPanel statusBar = new JPanel();
+		statusBar.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		contentPane.add(statusBar, BorderLayout.SOUTH);
+		statusBar.setLayout(new BoxLayout(statusBar, BoxLayout.X_AXIS));
+		
+		JLabel lblCheck = new JLabel("Masker Check");
+		lblCheck.setHorizontalAlignment(SwingConstants.LEFT);
+		statusBar.add(lblCheck);
+		
+		JSeparator separator_3 = new JSeparator();
+		statusBar.add(separator_3);
+		
+		JLabel lblTotal = new JLabel("Total 100 sites");
+		statusBar.add(lblTotal);
+		
+		JSeparator separator_4 = new JSeparator();
+		statusBar.add(separator_4);
+		
+		JLabel lblMatch = new JLabel("Match 50 sites");
+		statusBar.add(lblMatch);
 	}
 }
