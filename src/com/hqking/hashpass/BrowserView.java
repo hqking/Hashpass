@@ -30,6 +30,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.BevelBorder;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class BrowserView extends JFrame {
 
@@ -37,6 +39,7 @@ public class BrowserView extends JFrame {
 	private JTable table;
 	private JPasswordField masterKeyField;
 	private JTextField searchField;
+	private JLabel lblCheck;
 
 	public static void start() {
 		EventQueue.invokeLater(new Runnable() {
@@ -148,9 +151,21 @@ public class BrowserView extends JFrame {
 		contentPane.add(toolBar, BorderLayout.NORTH);
 		
 		JButton btnNewSite = new JButton("New");
+		btnNewSite.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new SiteController(new Site(Generator.TABLE_PRINTALBE_ASCII));
+			}
+		});
 		toolBar.add(btnNewSite);
 		
 		JButton btnDel = new JButton("Del");
+		btnDel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int row = table.getSelectedRow();
+	        	if (row != -1)
+	        		Hashpass.delete(Hashpass.db.getSitebyRow(row));
+			}
+		});
 		toolBar.add(btnDel);
 		
 		JLabel lblSearch = new JLabel("Search:");
@@ -168,6 +183,21 @@ public class BrowserView extends JFrame {
 		toolBar.add(lblMasterKey);
 		
 		masterKeyField = new JPasswordField();
+		masterKeyField.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				char[] input = masterKeyField.getPassword();
+	            Generator.setKey(new String(input));
+	            
+	            // for security reason, clear bytes to zero
+	            for (int i = 0; i < input.length; i++) {
+	            	input[i] = 0;
+	            }
+	            
+	            Site test = new Site(Generator.TABLE_PRINTALBE_ASCII);
+	            test.description = "test";
+	            lblCheck.setText(Generator.password(test));
+			}
+		});
 		lblMasterKey.setLabelFor(masterKeyField);
 		masterKeyField.setHorizontalAlignment(SwingConstants.LEFT);
 		masterKeyField.setColumns(24);
@@ -178,7 +208,7 @@ public class BrowserView extends JFrame {
 		contentPane.add(statusBar, BorderLayout.SOUTH);
 		statusBar.setLayout(new BoxLayout(statusBar, BoxLayout.X_AXIS));
 		
-		JLabel lblCheck = new JLabel("Masker Check");
+		lblCheck = new JLabel("Masker key check word");
 		lblCheck.setHorizontalAlignment(SwingConstants.LEFT);
 		statusBar.add(lblCheck);
 		
@@ -196,5 +226,8 @@ public class BrowserView extends JFrame {
 	}
 	public JTable getTable() {
 		return table;
+	}
+	protected JLabel getLblCheck() {
+		return lblCheck;
 	}
 }
