@@ -28,6 +28,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.AbstractListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.BevelBorder;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class BrowserView extends JFrame {
 
@@ -124,6 +126,21 @@ public class BrowserView extends JFrame {
 		splitPane.setRightComponent(scrollPaneSites);
 		
 		table = new JTable(Hashpass.db);
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getButton() == MouseEvent.BUTTON1 &&
+						e.getClickCount() == 2) {
+					int row = table.rowAtPoint(e.getPoint());
+					
+					if (row != -1) {
+						Site site = Hashpass.db.getSitebyRow(row); 
+					
+						new SiteController(site);
+					}
+				}
+			}
+		});
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPaneSites.setViewportView(table);
 		
@@ -176,5 +193,8 @@ public class BrowserView extends JFrame {
 		
 		JLabel lblMatch = new JLabel("Match 50 sites");
 		statusBar.add(lblMatch);
+	}
+	public JTable getTable() {
+		return table;
 	}
 }
