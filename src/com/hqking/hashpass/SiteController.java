@@ -79,6 +79,7 @@ class SiteController {
 		});
 		dialog.setResizable(false);
 		dialog.pack();
+		dialog.setLocationRelativeTo(null);
 		dialog.setVisible(true);
 	}
 	
