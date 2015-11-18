@@ -123,6 +123,11 @@ public class BrowserView extends JFrame {
 		menuBar.add(mnHelp);
 		
 		JMenuItem mntmAbout = new JMenuItem("About");
+		mntmAbout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				AboutView.display();
+			}
+		});
 		mnHelp.add(mntmAbout);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -133,7 +138,7 @@ public class BrowserView extends JFrame {
 		splitPane.setResizeWeight(0.3);
 		contentPane.add(splitPane);
 		
-		JScrollPane scrollPaneTags = new JScrollPane();
+		JScrollPane scrollPaneTags = new JScrollPane(); 
 		scrollPaneTags.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		splitPane.setLeftComponent(scrollPaneTags);
 		
