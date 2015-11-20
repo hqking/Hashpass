@@ -12,7 +12,7 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 class StorageSqlite extends AbstractTableModel
-					implements Storage {
+					implements Storage, Tags {
 	/**
 	 * 
 	 */
@@ -21,6 +21,11 @@ class StorageSqlite extends AbstractTableModel
 	private PreparedStatement select = null;
 	private PreparedStatement insert = null;
 	private PreparedStatement delete = null;
+	
+	private PreparedStatement tagSelect;
+	private PreparedStatement tagInsert;
+	private PreparedStatement tagDelete;
+	private PreparedStatement tagCount;
 	
 	StorageSqlite(String file) {	
 		try {
@@ -51,6 +56,11 @@ class StorageSqlite extends AbstractTableModel
 			for (int i = 0; i < PAGE_SIZE; i++) {
 				cells[i] = new String[columnName.length];
 			}
+			
+			tagSelect = connection.prepareStatement("select name from tag;");
+			tagInsert = connection.prepareStatement("insert into tag (name) values (?);");
+			tagDelete = connection.prepareStatement("delete from tag where name == ?;");
+			tagCount = connection.prepareStatement("select count(name) from tag;");
 			
 		} catch (SQLException e) {
 			
@@ -208,6 +218,55 @@ class StorageSqlite extends AbstractTableModel
 			System.out.println("sync failed" + e);
 			
 			rowNumber = 0;
+		}
+	}
+
+
+	@Override
+	public void addTag(String name) {
+		try {
+			tagInsert.setString(1, name);
+			
+			tagInsert.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void deleteTag(String name) {
+		try {
+			tagDelete.setString(1, name);
+			
+			tagDelete.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public String[] listTags() {
+		try {
+			ResultSet rs = tagCount.executeQuery();
+			int count = rs.getInt(1);
+			rs.close();
+			
+			String[] result = new String[count];
+			rs = tagSelect.executeQuery();
+			
+			for (int i = 0; i < count; i++) {
+				if (rs.next()) {
+					result[i] = rs.getString("name");
+				}
+			}
+			
+			rs.close();
+			
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+			return null;
 		}
 	}
 }

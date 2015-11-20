@@ -142,16 +142,7 @@ public class BrowserView extends JFrame {
 		scrollPaneTags.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		splitPane.setLeftComponent(scrollPaneTags);
 		
-		JList list = new JList();
-		list.setModel(new AbstractListModel() {
-			String[] values = new String[] {"test", "mama", "finance", "research", "personal", "shopping"};
-			public int getSize() {
-				return values.length;
-			}
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-		});
+		JList<String> list = new JList<String>(Hashpass.listTag());
 		scrollPaneTags.setViewportView(list);
 		
 		JScrollPane scrollPaneSites = new JScrollPane();

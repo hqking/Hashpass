@@ -21,6 +21,10 @@ public class Hashpass {
 	static int delete(Site site) {
 		return db.delete(site);
 	}
+	
+	static String[] listTag() {
+		return db.listTags();
+	}
 
 	
 	static void exit() {
