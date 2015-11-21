@@ -293,7 +293,12 @@ public class BrowserView extends JFrame {
 	}
 	
 	private void createSite() {
-		new SiteController(new Site(Generator.TABLE_PRINTALBE_ASCII));
+		char[] input = masterKeyField.getPassword();
+		
+		if (input.length == 0)
+			JOptionPane.showMessageDialog(this, "no master key has been set", "error", JOptionPane.ERROR_MESSAGE);
+		else
+			new SiteController(new Site(Generator.TABLE_PRINTALBE_ASCII));
 	}
 	public JLabel getLblTotal() {
 		return lblTotal;
