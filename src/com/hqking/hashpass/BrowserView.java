@@ -150,26 +150,6 @@ public class BrowserView extends JFrame {
 		scrollPaneTags.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		splitPane.setLeftComponent(scrollPaneTags);
 		
-		JToolBar toolBarTag = new JToolBar();
-		scrollPaneTags.setColumnHeaderView(toolBarTag);
-		
-		JButton btnAddtag = new JButton("Add");
-		btnAddtag.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				String tag = JOptionPane.showInputDialog(null, "new tag", "Add tag", JOptionPane.PLAIN_MESSAGE);
-				Hashpass.addTag(tag);
-			}
-		});
-		toolBarTag.add(btnAddtag);
-		
-		JRadioButton rdbtnAnd = new JRadioButton("&");
-		buttonGroup.add(rdbtnAnd);
-		toolBarTag.add(rdbtnAnd);
-		
-		JRadioButton rdbtnOr = new JRadioButton("|");
-		buttonGroup.add(rdbtnOr);
-		toolBarTag.add(rdbtnOr);
-		
 		tagList = new JList();
 		tagList.setModel(Hashpass.tagdb);
 		scrollPaneTags.setViewportView(tagList);
@@ -227,6 +207,15 @@ public class BrowserView extends JFrame {
 			}
 		});
 		toolBar.add(btnDel);
+		
+		JButton btnAddtag = new JButton("Add");
+		toolBar.add(btnAddtag);
+		btnAddtag.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String tag = JOptionPane.showInputDialog(null, "new tag", "Add tag", JOptionPane.PLAIN_MESSAGE);
+				Hashpass.addTag(tag);
+			}
+		});
 		
 		JLabel lblSearch = new JLabel("Search:");
 		toolBar.add(lblSearch);
