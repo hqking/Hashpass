@@ -25,6 +25,10 @@ public class Hashpass {
 	static String[] listTag() {
 		return db.listTags();
 	}
+	
+	static void addTag(String name) {
+		db.addTag(name);
+	}
 
 	
 	static void exit() {

@@ -15,6 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JList;
 import javax.swing.JTable;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
@@ -36,6 +37,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 import java.awt.Component;
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
 
 public class BrowserView extends JFrame {
 
@@ -46,6 +49,7 @@ public class BrowserView extends JFrame {
 	private JLabel lblCheck;
 	private JLabel lblTotal;
 	private JLabel lblMatch;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
 
 	public static void start() {
 		EventQueue.invokeLater(new Runnable() {
@@ -142,8 +146,28 @@ public class BrowserView extends JFrame {
 		scrollPaneTags.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		splitPane.setLeftComponent(scrollPaneTags);
 		
-		JList<String> list = new JList<String>(Hashpass.listTag());
+		JList<String> list = new JList(Hashpass.listTag());
 		scrollPaneTags.setViewportView(list);
+		
+		JToolBar toolBarTag = new JToolBar();
+		scrollPaneTags.setColumnHeaderView(toolBarTag);
+		
+		JButton btnAddtag = new JButton("Add");
+		btnAddtag.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String tag = JOptionPane.showInputDialog(null, "new tag", "Add tag", JOptionPane.PLAIN_MESSAGE);
+				Hashpass.addTag(tag);
+			}
+		});
+		toolBarTag.add(btnAddtag);
+		
+		JRadioButton rdbtnAnd = new JRadioButton("&");
+		buttonGroup.add(rdbtnAnd);
+		toolBarTag.add(rdbtnAnd);
+		
+		JRadioButton rdbtnOr = new JRadioButton("|");
+		buttonGroup.add(rdbtnOr);
+		toolBarTag.add(rdbtnOr);
 		
 		JScrollPane scrollPaneSites = new JScrollPane();
 		splitPane.setRightComponent(scrollPaneSites);
