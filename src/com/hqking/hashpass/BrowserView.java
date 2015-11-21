@@ -146,9 +146,6 @@ public class BrowserView extends JFrame {
 		scrollPaneTags.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		splitPane.setLeftComponent(scrollPaneTags);
 		
-		JList<String> list = new JList(Hashpass.listTag());
-		scrollPaneTags.setViewportView(list);
-		
 		JToolBar toolBarTag = new JToolBar();
 		scrollPaneTags.setColumnHeaderView(toolBarTag);
 		
@@ -168,6 +165,10 @@ public class BrowserView extends JFrame {
 		JRadioButton rdbtnOr = new JRadioButton("|");
 		buttonGroup.add(rdbtnOr);
 		toolBarTag.add(rdbtnOr);
+		
+		JList list = new JList();
+		list.setModel(Hashpass.tagdb);
+		scrollPaneTags.setViewportView(list);
 		
 		JScrollPane scrollPaneSites = new JScrollPane();
 		splitPane.setRightComponent(scrollPaneSites);

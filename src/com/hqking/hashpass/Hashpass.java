@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Hashpass {
 	static StorageSqlite db;
+	static TagsModel tagdb; 
 	
 	static int save(Site site) {
 		return db.save(site);
@@ -60,6 +61,8 @@ public class Hashpass {
 		
 		db = new StorageSqlite("test.db");
 		db.sync();
+		
+		tagdb = new TagsModel("test.db");
 		
 		Site ccb = db.find("ccb");
 		if (ccb != null) {
