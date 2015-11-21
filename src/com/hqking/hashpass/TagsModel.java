@@ -9,7 +9,7 @@ import java.sql.Statement;
 
 import javax.swing.AbstractListModel;
 
-class TagsModel extends AbstractListModel<String> {
+class TagsModel extends AbstractListModel<String> implements Tags {
 	/**
 	 * 
 	 */
@@ -77,4 +77,38 @@ class TagsModel extends AbstractListModel<String> {
 		return count;
 	}
 
+	@Override
+	public void addTag(String name) {
+		try {
+			tagInsert.setString(1, name);
+			
+			tagInsert.executeUpdate();
+			
+			sync();
+			
+			fireIntervalAdded(this, 0, count);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void deleteTag(String name) {
+		try {
+			tagDelete.setString(1, name);
+			
+			tagDelete.executeUpdate();
+			
+			sync();
+			
+			fireIntervalRemoved(this, 0, count);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public String[] listTags() {
+		return list;
+	}
 }

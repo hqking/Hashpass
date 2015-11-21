@@ -12,7 +12,7 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 class StorageSqlite extends AbstractTableModel
-					implements Storage, Tags {
+					implements Storage {
 	/**
 	 * 
 	 */
@@ -218,55 +218,6 @@ class StorageSqlite extends AbstractTableModel
 			System.out.println("sync failed" + e);
 			
 			rowNumber = 0;
-		}
-	}
-
-
-	@Override
-	public void addTag(String name) {
-		try {
-			tagInsert.setString(1, name);
-			
-			tagInsert.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public void deleteTag(String name) {
-		try {
-			tagDelete.setString(1, name);
-			
-			tagDelete.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public String[] listTags() {
-		try {
-			ResultSet rs = tagCount.executeQuery();
-			int count = rs.getInt(1);
-			rs.close();
-			
-			String[] result = new String[count];
-			rs = tagSelect.executeQuery();
-			
-			for (int i = 0; i < count; i++) {
-				if (rs.next()) {
-					result[i] = rs.getString("name");
-				}
-			}
-			
-			rs.close();
-			
-			return result;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			
-			return null;
 		}
 	}
 }

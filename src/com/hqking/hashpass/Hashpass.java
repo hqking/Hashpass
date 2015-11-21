@@ -23,12 +23,8 @@ public class Hashpass {
 		return db.delete(site);
 	}
 	
-	static String[] listTag() {
-		return db.listTags();
-	}
-	
 	static void addTag(String name) {
-		db.addTag(name);
+		tagdb.addTag(name);
 	}
 
 	
