@@ -27,6 +27,9 @@ public class Hashpass {
 		tagdb.addTag(name);
 	}
 
+	static void deleteTag(String name) {
+		tagdb.deleteTag(name);
+	}
 	
 	static void exit() {
 		Generator.clearKey();

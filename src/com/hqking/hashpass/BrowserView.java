@@ -39,6 +39,7 @@ import org.eclipse.wb.swing.FocusTraversalOnArray;
 import java.awt.Component;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
+import javax.swing.JPopupMenu;
 
 public class BrowserView extends JFrame {
 
@@ -51,6 +52,9 @@ public class BrowserView extends JFrame {
 	private JLabel lblMatch;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 
+	private JList<String> tagList;
+	private String tagSelected;
+	
 	public static void start() {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -166,9 +170,20 @@ public class BrowserView extends JFrame {
 		buttonGroup.add(rdbtnOr);
 		toolBarTag.add(rdbtnOr);
 		
-		JList list = new JList();
-		list.setModel(Hashpass.tagdb);
-		scrollPaneTags.setViewportView(list);
+		tagList = new JList();
+		tagList.setModel(Hashpass.tagdb);
+		scrollPaneTags.setViewportView(tagList);
+		
+		JPopupMenu popupMenu = new JPopupMenu();
+		addPopup(tagList, popupMenu);
+		
+		JMenuItem mntmDeleteTag = new JMenuItem("Delete");
+		mntmDeleteTag.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Hashpass.deleteTag(tagSelected);
+			}
+		});
+		popupMenu.add(mntmDeleteTag);
 		
 		JScrollPane scrollPaneSites = new JScrollPane();
 		splitPane.setRightComponent(scrollPaneSites);
@@ -285,5 +300,26 @@ public class BrowserView extends JFrame {
 	}
 	public JLabel getLblMatch() {
 		return lblMatch;
+	}
+	private void addPopup(Component component, final JPopupMenu popup) {
+		component.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			private void showMenu(MouseEvent e) {
+				int index = tagList.locationToIndex(e.getPoint());
+				tagList.setSelectedIndex(index);
+				tagSelected = tagList.getSelectedValue();
+				
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+		});
 	}
 }
