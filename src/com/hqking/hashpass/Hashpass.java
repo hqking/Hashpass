@@ -31,6 +31,10 @@ public class Hashpass {
 		tagdb.deleteTag(name);
 	}
 	
+	static String[] listTags() {
+		return tagdb.listTags();
+	}
+	
 	static void exit() {
 		Generator.clearKey();
 		System.exit(0);

@@ -38,6 +38,10 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ChangeEvent;
 import java.awt.event.KeyEvent;
+import javax.swing.JList;
+import javax.swing.ListSelectionModel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 public class SiteView extends JPanel {
 	/**
@@ -45,7 +49,6 @@ public class SiteView extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JTextField textDescription;
-	private JTextField textTags;
 	private JLabel lblPassword;
 	private JLabel lblEntropyData;
 	private JLabel lblScoreData;
@@ -58,6 +61,11 @@ public class SiteView extends JPanel {
 	private JButton btnCopy;
 	private JButton btnSave;
 	private JButton btnQuit;
+	private JList list;
+	private JComboBox<String> comboTags;
+	private JScrollPane scrollPane;
+	private JButton btnAddTag;
+	private JLabel lblBumpDesc;
 	
 	/**
 	 * Create the panel.
@@ -86,9 +94,9 @@ public class SiteView extends JPanel {
 		add(panelParams, BorderLayout.NORTH);
 		panelParams.setBorder(new CompoundBorder(new TitledBorder(new LineBorder(new Color(184, 207, 229)), "Parameters", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(51, 51, 51)), new EmptyBorder(5, 5, 5, 5)));
 		GridBagLayout gbl_panelParams = new GridBagLayout();
-		gbl_panelParams.columnWidths = new int[]{0, 0, 0};
+		gbl_panelParams.columnWidths = new int[]{0, 0, 0, 0, 0};
 		gbl_panelParams.rowHeights = new int[]{0, 0, 0, 0, 0, 0};
-		gbl_panelParams.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+		gbl_panelParams.columnWeights = new double[]{0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		gbl_panelParams.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		panelParams.setLayout(gbl_panelParams);
 		
@@ -122,6 +130,7 @@ public class SiteView extends JPanel {
 		});
 		lblDescription.setLabelFor(textDescription);
 		GridBagConstraints gbc_textDescription = new GridBagConstraints();
+		gbc_textDescription.gridwidth = 3;
 		gbc_textDescription.insets = new Insets(0, 0, 5, 0);
 		gbc_textDescription.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textDescription.gridx = 1;
@@ -149,7 +158,9 @@ public class SiteView extends JPanel {
 		sliderLength.setPaintLabels(true);
 		sliderLength.setMinorTickSpacing(1);
 		GridBagConstraints gbc_sliderLength = new GridBagConstraints();
+		gbc_sliderLength.gridwidth = 3;
 		gbc_sliderLength.fill = GridBagConstraints.HORIZONTAL;
+		gbc_sliderLength.anchor = GridBagConstraints.EAST;
 		gbc_sliderLength.insets = new Insets(0, 0, 5, 0);
 		gbc_sliderLength.gridx = 1;
 		gbc_sliderLength.gridy = 1;
@@ -162,6 +173,7 @@ public class SiteView extends JPanel {
 		gbc_lblPattern.gridx = 0;
 		gbc_lblPattern.gridy = 2;
 		panelParams.add(lblPattern, gbc_lblPattern);
+		panelParams.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{textDescription, sliderLength, comboPatternSelector, spinner}));
 		
 		comboPatternSelector = new JComboBox<String>();
 		comboPatternSelector.addActionListener(new ActionListener() {
@@ -171,6 +183,7 @@ public class SiteView extends JPanel {
 		});
 		comboPatternSelector.setModel(new DefaultComboBoxModel<String>(new String[] {Generator.TABLE_PRINTALBE_ASCII, Generator.TABLE_ALPHA_NUMERIC, Generator.TABLE_NUMBERS_ONLY}));
 		GridBagConstraints gbc_comboPatternSelector = new GridBagConstraints();
+		gbc_comboPatternSelector.gridwidth = 3;
 		gbc_comboPatternSelector.insets = new Insets(0, 0, 5, 0);
 		gbc_comboPatternSelector.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboPatternSelector.gridx = 1;
@@ -195,11 +208,23 @@ public class SiteView extends JPanel {
 		spinner.setPreferredSize(new Dimension(60, 20));
 		spinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
 		GridBagConstraints gbc_spinner = new GridBagConstraints();
-		gbc_spinner.insets = new Insets(0, 0, 5, 0);
+		gbc_spinner.fill = GridBagConstraints.HORIZONTAL;
+		gbc_spinner.insets = new Insets(0, 0, 5, 5);
 		gbc_spinner.anchor = GridBagConstraints.WEST;
 		gbc_spinner.gridx = 1;
 		gbc_spinner.gridy = 3;
 		panelParams.add(spinner, gbc_spinner);
+		
+		lblBumpDesc = new JLabel("Adjust bump number to change result");
+		lblBumpDesc.setHorizontalAlignment(SwingConstants.CENTER);
+		GridBagConstraints gbc_lblBumpDesc = new GridBagConstraints();
+		gbc_lblBumpDesc.fill = GridBagConstraints.HORIZONTAL;
+		gbc_lblBumpDesc.anchor = GridBagConstraints.WEST;
+		gbc_lblBumpDesc.gridwidth = 2;
+		gbc_lblBumpDesc.insets = new Insets(0, 0, 5, 5);
+		gbc_lblBumpDesc.gridx = 2;
+		gbc_lblBumpDesc.gridy = 3;
+		panelParams.add(lblBumpDesc, gbc_lblBumpDesc);
 		
 		JLabel lblTags = new JLabel("Tags:");
 		GridBagConstraints gbc_lblTags = new GridBagConstraints();
@@ -209,15 +234,37 @@ public class SiteView extends JPanel {
 		gbc_lblTags.gridy = 4;
 		panelParams.add(lblTags, gbc_lblTags);
 		
-		textTags = new JTextField();
-		lblTags.setLabelFor(textTags);
-		GridBagConstraints gbc_textTags = new GridBagConstraints();
-		gbc_textTags.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textTags.gridx = 1;
-		gbc_textTags.gridy = 4;
-		panelParams.add(textTags, gbc_textTags);
-		textTags.setColumns(10);
-		panelParams.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{textDescription, sliderLength, comboPatternSelector, spinner, textTags}));
+		comboTags = new JComboBox(Hashpass.listTags());
+		comboTags.setPreferredSize(new Dimension(96, 24));
+		comboTags.setEditable(true);
+		GridBagConstraints gbc_comboTags = new GridBagConstraints();
+		gbc_comboTags.insets = new Insets(0, 0, 0, 5);
+		gbc_comboTags.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboTags.gridx = 1;
+		gbc_comboTags.gridy = 4;
+		panelParams.add(comboTags, gbc_comboTags);
+		
+		btnAddTag = new JButton("+");
+		btnAddTag.setPreferredSize(new Dimension(25, 25));
+		GridBagConstraints gbc_btnAddTag = new GridBagConstraints();
+		gbc_btnAddTag.insets = new Insets(0, 0, 0, 5);
+		gbc_btnAddTag.gridx = 2;
+		gbc_btnAddTag.gridy = 4;
+		panelParams.add(btnAddTag, gbc_btnAddTag);
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+		gbc_scrollPane.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane.gridx = 3;
+		gbc_scrollPane.gridy = 4;
+		panelParams.add(scrollPane, gbc_scrollPane);
+		
+		JList listTags = new JList();
+		scrollPane.setViewportView(listTags);
+		listTags.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+		listTags.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		list = listTags;
 		
 		JPanel buttonPane = new JPanel();
 		buttonPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -360,9 +407,6 @@ public class SiteView extends JPanel {
 	}
 	JSpinner getSpinner() {
 		return spinner;
-	}
-	JTextField getTextTags() {
-		return textTags;
 	}
 	JTextField getTextDescription() {
 		return textDescription;

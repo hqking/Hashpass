@@ -24,7 +24,6 @@ class SiteController {
 	private JSlider sliderLength;
 	private JComboBox<String> comboPatternSelector;
 	private JSpinner spinner;
-	private JTextField textTags;
 	private JTextField textDescription;
 	private Site site;
 	private Site siteSaved;
@@ -48,7 +47,6 @@ class SiteController {
 		sliderLength = view.getSliderLength();
 		comboPatternSelector = view.getComboPatternSelector();
 		spinner = view.getSpinner();
-		textTags = view.getTextTags();
 		textDescription = view.getTextDescription();
 		tglbtnShow = view.getTglbtnShow();
 		//btnCopy = view.getBtnCopy();
@@ -129,6 +127,10 @@ class SiteController {
 	
 	public void btnQuitPressed() {
 		quitAction();
+	}
+	
+	public void siteWithTags(String tags) {
+		
 	}
 	
 	private void maskPassword(String pwd) {
