@@ -37,7 +37,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ChangeEvent;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class SiteView extends JPanel {

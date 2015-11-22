@@ -26,7 +26,6 @@ import javax.swing.SwingConstants;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.AbstractListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.BevelBorder;
 import java.awt.event.MouseAdapter;
@@ -37,12 +36,10 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 import java.awt.Component;
-import javax.swing.JRadioButton;
-import javax.swing.ButtonGroup;
 import javax.swing.JPopupMenu;
 
 public class BrowserView extends JFrame {
-
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTable table;
 	private JPasswordField masterKeyField;
@@ -50,7 +47,6 @@ public class BrowserView extends JFrame {
 	private JLabel lblCheck;
 	private JLabel lblTotal;
 	private JLabel lblMatch;
-	private final ButtonGroup buttonGroup = new ButtonGroup();
 
 	private JList<String> tagList;
 	private String tagSelected;
@@ -150,7 +146,7 @@ public class BrowserView extends JFrame {
 		scrollPaneTags.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		splitPane.setLeftComponent(scrollPaneTags);
 		
-		tagList = new JList();
+		tagList = new JList<String>();
 		tagList.setModel(Hashpass.tagdb);
 		scrollPaneTags.setViewportView(tagList);
 		

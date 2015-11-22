@@ -22,11 +22,6 @@ class StorageSqlite extends AbstractTableModel
 	private PreparedStatement insert = null;
 	private PreparedStatement delete = null;
 	
-	private PreparedStatement tagSelect;
-	private PreparedStatement tagInsert;
-	private PreparedStatement tagDelete;
-	private PreparedStatement tagCount;
-	
 	StorageSqlite(String file) {	
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + file);
@@ -56,11 +51,6 @@ class StorageSqlite extends AbstractTableModel
 			for (int i = 0; i < PAGE_SIZE; i++) {
 				cells[i] = new String[columnName.length];
 			}
-			
-			tagSelect = connection.prepareStatement("select name from tag;");
-			tagInsert = connection.prepareStatement("insert into tag (name) values (?);");
-			tagDelete = connection.prepareStatement("delete from tag where name == ?;");
-			tagCount = connection.prepareStatement("select count(name) from tag;");
 			
 		} catch (SQLException e) {
 			

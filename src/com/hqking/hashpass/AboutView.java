@@ -12,6 +12,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class AboutView extends JPanel {
+	private static final long serialVersionUID = 1L;
+	
 	private static Popup ppp;
 	
 	/**
