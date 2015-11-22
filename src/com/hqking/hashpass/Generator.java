@@ -98,7 +98,14 @@ class Generator {
 		// Todo:
 	}
 	
-	static String password(Site site) {		
+	static boolean isKeySet() {
+		if (masterKey.length() > 0)
+			return true;
+		else
+			return false;
+	}
+	
+	static String password(Site site) {
 		byte hash[] = hashedWord(masterKey + site.description);
 		seed = bytes2long(hash);
 		

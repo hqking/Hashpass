@@ -51,6 +51,8 @@ public class BrowserView extends JFrame {
 	private JList<String> tagList;
 	private String tagSelected;
 	
+	private static final String NO_MASTER_KEY = "no master key"; 
+	
 	public static void start() {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -238,9 +240,13 @@ public class BrowserView extends JFrame {
 	            	input[i] = 0;
 	            }
 	            
-	            Site test = new Site(Generator.TABLE_PRINTALBE_ASCII);
-	            test.description = "test";
-	            lblCheck.setText(Generator.password(test));
+	            if (Generator.isKeySet()) {
+	            	Site test = new Site(Generator.TABLE_PRINTALBE_ASCII);
+	            	test.description = "test";
+	            	lblCheck.setText(Generator.password(test));
+	            } else {
+	            	lblCheck.setText(NO_MASTER_KEY);
+	            }
 			}
 		});
 		lblMasterKey.setLabelFor(masterKeyField);
@@ -253,7 +259,7 @@ public class BrowserView extends JFrame {
 		contentPane.add(statusBar, BorderLayout.SOUTH);
 		statusBar.setLayout(new BoxLayout(statusBar, BoxLayout.X_AXIS));
 		
-		lblCheck = new JLabel("Masker key check word");
+		lblCheck = new JLabel(NO_MASTER_KEY);
 		lblCheck.setHorizontalAlignment(SwingConstants.LEFT);
 		statusBar.add(lblCheck);
 		
@@ -277,13 +283,11 @@ public class BrowserView extends JFrame {
 		return lblCheck;
 	}
 	
-	private void createSite() {
-		char[] input = masterKeyField.getPassword();
-		
-		if (input.length == 0)
-			JOptionPane.showMessageDialog(this, "no master key has been set", "error", JOptionPane.ERROR_MESSAGE);
-		else
+	private void createSite() {		
+		if (Generator.isKeySet())
 			new SiteController(new Site(Generator.TABLE_PRINTALBE_ASCII));
+		else
+			JOptionPane.showMessageDialog(this, "no master key has been set", "error", JOptionPane.ERROR_MESSAGE);
 	}
 	public JLabel getLblTotal() {
 		return lblTotal;
