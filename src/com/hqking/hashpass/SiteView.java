@@ -42,6 +42,10 @@ import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.JPopupMenu;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.JMenuItem;
 
 public class SiteView extends JPanel {
 	/**
@@ -61,11 +65,13 @@ public class SiteView extends JPanel {
 	private JButton btnCopy;
 	private JButton btnSave;
 	private JButton btnQuit;
-	private JList list;
 	private JComboBox<String> comboTags;
 	private JScrollPane scrollPane;
 	private JButton btnAddTag;
 	private JLabel lblBumpDesc;
+	private JPopupMenu popupMenu;
+	private JMenuItem mntmDelete;
+	private JList<String> listTags;
 	
 	/**
 	 * Create the panel.
@@ -245,6 +251,11 @@ public class SiteView extends JPanel {
 		panelParams.add(comboTags, gbc_comboTags);
 		
 		btnAddTag = new JButton("+");
+		btnAddTag.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				controller.siteAddTag((String)comboTags.getSelectedItem());
+			}
+		});
 		btnAddTag.setPreferredSize(new Dimension(25, 25));
 		GridBagConstraints gbc_btnAddTag = new GridBagConstraints();
 		gbc_btnAddTag.insets = new Insets(0, 0, 0, 5);
@@ -260,11 +271,23 @@ public class SiteView extends JPanel {
 		gbc_scrollPane.gridy = 4;
 		panelParams.add(scrollPane, gbc_scrollPane);
 		
-		JList listTags = new JList();
+		listTags = new JList(controller.getSiteTags());
+		listTags.setVisibleRowCount(1);
 		scrollPane.setViewportView(listTags);
 		listTags.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		listTags.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		list = listTags;
+		
+		popupMenu = new JPopupMenu();
+		addPopup(listTags, popupMenu);
+		
+		mntmDelete = new JMenuItem("delete");
+		mntmDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				controller.siteDelTag(listTags.getSelectedValue());
+			}
+		});
+		mntmDelete.setSelected(true);
+		popupMenu.add(mntmDelete);
 		
 		JPanel buttonPane = new JPanel();
 		buttonPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -422,5 +445,25 @@ public class SiteView extends JPanel {
 	}
 	public JButton getBtnQuit() {
 		return btnQuit;
+	}
+	private void addPopup(Component component, final JPopupMenu popup) {
+		component.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			private void showMenu(MouseEvent e) {
+				int index = listTags.locationToIndex(e.getPoint());
+				listTags.setSelectedIndex(index);
+				
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+		});
 	}
 }

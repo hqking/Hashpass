@@ -35,9 +35,14 @@ class SiteController {
 	//private JButton btnQuit;
 	private JDialog dialog;
 	
+	private SiteTags taglist;
+	
 	SiteController(Site site) {
 		this.site = site;
 		siteSaved = site.copy();
+		
+		taglist = new SiteTags();
+		
 		SiteView view = new SiteView(this);
 		
 		lblPassword = view.getLblPassword();
@@ -129,8 +134,16 @@ class SiteController {
 		quitAction();
 	}
 	
-	public void siteWithTags(String tags) {
-		
+	public void siteAddTag(String tag) {
+		taglist.addTag(tag);
+	}
+	
+	public void siteDelTag(String tag) {
+		taglist.deleteTag(tag);
+	}
+	
+	public SiteTags getSiteTags() {
+		return taglist;
 	}
 	
 	private void maskPassword(String pwd) {
