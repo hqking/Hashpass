@@ -41,7 +41,7 @@ class SiteController {
 		this.site = site;
 		siteSaved = site.copy();
 		
-		taglist = new SiteTags();
+		taglist = new SiteTags(site);
 		
 		SiteView view = new SiteView(this);
 		
