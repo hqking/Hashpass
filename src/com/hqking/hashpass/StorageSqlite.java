@@ -24,9 +24,7 @@ class StorageSqlite extends AbstractTableModel
 	
 	StorageSqlite(String file) {	
 		try {
-			connection = DriverManager.getConnection("jdbc:sqlite:" + file);
-			Statement stat = connection.createStatement();
-			stat.setQueryTimeout(10);
+			connection = Hashpass.getConnection();
 			
 			String table = "create table if not exists site (" +
 					"description text primary key," +
@@ -34,6 +32,8 @@ class StorageSqlite extends AbstractTableModel
 					"length integer," +
 					"type text)";
 
+			Statement stat = connection.createStatement();
+			stat.setQueryTimeout(10);
 			stat.executeUpdate(table);
 			
 			select = connection.prepareStatement("select " +

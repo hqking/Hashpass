@@ -1,11 +1,13 @@
 package com.hqking.hashpass;
 
 import java.security.NoSuchAlgorithmException;
+import java.sql.Connection;
 import java.util.List;
 
 public class Hashpass {
 	static StorageSqlite db;
 	static TagsModel tagdb; 
+	static Dbfile dbfile = new Dbfile("test.db"); 
 	
 	static int save(Site site) {
 		return db.save(site);
@@ -38,6 +40,10 @@ public class Hashpass {
 	static void exit() {
 		Generator.clearKey();
 		System.exit(0);
+	}
+	
+	static Connection getConnection() {
+		return dbfile.getConnection();
 	}
 	
 	/**

@@ -25,9 +25,7 @@ class TagsModel extends AbstractListModel<String> implements Tags {
 	
 	public TagsModel(String dbFile) {
 		try {
-			connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile);
-			Statement stat = connection.createStatement();
-			stat.setQueryTimeout(10);
+			connection = Hashpass.getConnection();
 
 			tagSelect = connection.prepareStatement("select name from tag;");
 			tagInsert = connection.prepareStatement("insert into tag (name) values (?);");

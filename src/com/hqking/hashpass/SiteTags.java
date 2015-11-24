@@ -30,14 +30,11 @@ class SiteTags extends AbstractListModel<String> {
 		this.site = site;
 		
 		try {
-			connection = DriverManager.getConnection("jdbc:sqlite:" + "test.db");
-			Statement stat = connection.createStatement();
-			stat.setQueryTimeout(10);
+			connection = Hashpass.getConnection();
 
 			tagSelect = connection.prepareStatement("select tag from siteTags where site == ?;");
 			tagInsert = connection.prepareStatement("insert into siteTags (site, tag) values (?, ?);");
-			tagDelete = connection.prepareStatement("delete from siteTags where site == ? and tag == ?;");
-			//tagCount = connection.prepareStatement("select count(name) from tag;");
+			tagDelete = connection.prepareStatement("delete from siteTags where site = ? and tag = ?;");
 
 			tagSelect.setString(1, site.description);
 
@@ -58,6 +55,10 @@ class SiteTags extends AbstractListModel<String> {
 		}
 	}
 	
+	public void saveTags() {
+		
+	}
+	
 	public void addTag(String tag) {
 		if (count < MAX_TAG_ALLOWED) {
 			int i;
@@ -72,6 +73,15 @@ class SiteTags extends AbstractListModel<String> {
 				count++;
 			
 				fireIntervalAdded(this, 0, count);
+				
+				try {
+					tagInsert.setString(1, site.description);
+					tagInsert.setString(2, tag);
+					tagInsert.execute();
+
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -83,12 +93,25 @@ class SiteTags extends AbstractListModel<String> {
 				break;
 			}
 		}
+
+		if (i < count) {
+			try {
+				tagDelete.setString(1, site.description);
+				tagDelete.setString(2, tag);
+				tagDelete.execute();
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		for (int j = i + 1; j < count; j++, i++) {
 			tags[i] = tags[j];
 		}
 		
 		count = i;
+		
+		fireIntervalRemoved(this, 0, count);
 	}
 	
 	@Override
