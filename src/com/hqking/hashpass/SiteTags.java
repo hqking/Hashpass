@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import javax.swing.AbstractListModel;
+import javax.swing.JOptionPane;
 
 class SiteTags extends AbstractListModel<String> {
 	/**
@@ -83,6 +84,8 @@ class SiteTags extends AbstractListModel<String> {
 					e.printStackTrace();
 				}
 			}
+		} else {
+			JOptionPane.showMessageDialog(null, "tags number limit reached", "too much tags", JOptionPane.WARNING_MESSAGE);
 		}
 	}
 	
