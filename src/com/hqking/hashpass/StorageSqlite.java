@@ -1,11 +1,9 @@
 package com.hqking.hashpass;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,17 +23,7 @@ class StorageSqlite extends AbstractTableModel
 	StorageSqlite(String file) {	
 		try {
 			connection = Hashpass.getConnection();
-			
-			String table = "create table if not exists site (" +
-					"description text primary key," +
-					"bump integer," +
-					"length integer," +
-					"type text)";
-
-			Statement stat = connection.createStatement();
-			stat.setQueryTimeout(10);
-			stat.executeUpdate(table);
-			
+						
 			select = connection.prepareStatement("select " +
 					"description, length, type, bump" +
 					" from site where description like ?");

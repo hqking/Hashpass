@@ -240,7 +240,7 @@ public class SiteView extends JPanel {
 		gbc_lblTags.gridy = 4;
 		panelParams.add(lblTags, gbc_lblTags);
 		
-		comboTags = new JComboBox(Hashpass.listTags());
+		comboTags = new JComboBox<String>(Hashpass.listTags());
 		comboTags.setPreferredSize(new Dimension(96, 24));
 		comboTags.setEditable(true);
 		GridBagConstraints gbc_comboTags = new GridBagConstraints();
@@ -271,7 +271,7 @@ public class SiteView extends JPanel {
 		gbc_scrollPane.gridy = 4;
 		panelParams.add(scrollPane, gbc_scrollPane);
 		
-		listTags = new JList(controller.getSiteTags());
+		listTags = new JList<String>(controller.getSiteTags());
 		listTags.setVisibleRowCount(1);
 		scrollPane.setViewportView(listTags);
 		listTags.setLayoutOrientation(JList.HORIZONTAL_WRAP);

@@ -13,6 +13,16 @@ class Dbfile {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + "test.db");
 			Statement stat = connection.createStatement();
 			stat.setQueryTimeout(10);
+			
+			String table = "create table if not exists site (" +
+					"description text primary key," +
+					"bump integer," +
+					"length integer," +
+					"type text)";
+
+			stat.setQueryTimeout(10);
+			stat.executeUpdate(table);
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -1,11 +1,9 @@
 package com.hqking.hashpass;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import javax.swing.AbstractListModel;
 import javax.swing.JOptionPane;
@@ -21,7 +19,6 @@ class SiteTags extends AbstractListModel<String> {
 	private PreparedStatement tagSelect;
 	private PreparedStatement tagInsert;
 	private PreparedStatement tagDelete;
-	private PreparedStatement tagCount;
 	
 	private Site site;
 	private String[] tags = new String[MAX_TAG_ALLOWED];
